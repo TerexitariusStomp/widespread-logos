@@ -149,9 +149,9 @@
             # redirect) and the keycard-gate fork branch. Sources are
             # byte-identical (the branch only touches lez/wallet), so merging
             # the vendor dir is safe.
-            (subst "git-crate dirs_exist_ok"
+            (subst "git-crate dup-source guard"
                "    shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func)\n"
-               "    shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func, dirs_exist_ok=True)\n"
+               "    if crate_out_dir.exists():\n        eprint(f\"Vendor dir {crate_out_dir} already exists (duplicate git source), skipping\")\n    else:\n        shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func)\n"
                (builtins.readFile "${rustBuildSupport}/fetch-cargo-vendor-util.py")))));
         in
         { name, hash, ... }@args:
