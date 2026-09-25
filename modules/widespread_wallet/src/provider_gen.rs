@@ -392,3 +392,66 @@ pub extern "C" fn logos_module_string_free(s: *mut c_char) {
         unsafe { drop(CString::from_raw(s)) };
     }
 }
+
+// ── protocol ≥0.3: host-service grant ────────────────────────────────────────
+// The Qt glue calls this with the services the host granted; forwards to the
+// SDK's registry exactly as the C++ emitter does.
+#[no_mangle]
+pub extern "C" fn logos_module_grant_host_services(services_json: *const c_char) -> c_int {
+    unsafe { logos_rust_sdk::grant_host_services(services_json) }
+}
+
+// ── protocol ≥0.5: unload teardown pair ──────────────────────────────────────
+// `Option<extern "C" fn(..)>` is the nullable function pointer the C side
+// spells `logos_module_unload_done_cb cb` — a NULL cb clears the slot.
+#[no_mangle]
+pub extern "C" fn logos_module_set_unload_done_callback(
+    cb: Option<logos_rust_sdk::UnloadDoneCb>,
+    user_data: *mut c_void,
+) {
+    logos_rust_sdk::set_unload_done_callback(cb, user_data);
+}
+
+/// Ask the impl whether it is ready to be unloaded: 0 = Synchronous
+/// (proceed), 1 = Asynchronous (wait for unload_finished()).
+///
+/// A module that was never installed answers 0: there is no instance, so
+/// there is nothing to tear down and nothing for the host to wait on.
+#[no_mangle]
+pub extern "C" fn logos_module_about_to_unload() -> c_int {
+    let hook = REGISTERED.lock().unwrap().as_ref().map(|r| r.about_to_unload);
+    match hook {
+        Some(f) => f(),
+        None => 0,
+    }
+}
+
+// ── protocol ≥0.6: caller identity ───────────────────────────────────────────
+// NULL is a VALUE in this ABI — it POPS the innermost caller — so this must
+// not gain a null guard.
+#[no_mangle]
+pub extern "C" fn logos_module_set_call_caller(caller_json: *const c_char) {
+    unsafe { logos_rust_sdk::set_call_caller(caller_json) }
+}
+
+// ── protocol ≥0.8: inbound caller token ──────────────────────────────────────
+// Declared here, not in the SDK crate: a `pub fn` wrapper shares an rlib
+// object with save_token and its undefined lp_token_save_inbound reference
+// would then land in every module. Refuses NULL — NULL is not a value in
+// this ABI (unlike set_call_caller).
+extern "C" {
+    fn lp_token_save_inbound(caller: *const c_char, token: *const c_char) -> c_int;
+}
+
+#[no_mangle]
+pub extern "C" fn logos_module_accept_inbound_token(
+    caller: *const c_char,
+    token: *const c_char,
+) -> c_int {
+    if caller.is_null() || token.is_null() {
+        return -1;
+    }
+    // INBOUND: `caller` is the module that will CALL US. Not a credential we
+    // may present, and it must not reach lp_token_save().
+    unsafe { lp_token_save_inbound(caller, token) }
+}

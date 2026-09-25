@@ -38,28 +38,30 @@ jobs:
           echo "=== where do shipped dlls point ==="
           readlink -f /nix/store/*qtbase*mingw32*/bin/libstdc++-6.dll 2>/dev/null || true
           find /nix/store -name "libstdc++-6.dll" -exec readlink {} \; 2>/dev/null | sort -u | head -10
-          echo "=== gcc search paths ==="
-          cxx=$(find /nix/store -maxdepth 3 -name "x86_64-w64-mingw32-g++" -type f | head -1)
+          echo "=== gcc search paths (WRAPPER — carries CRT dirs) ==="
+          cxx=$(find /nix/store -maxdepth 3 -path "*gcc-wrapper*" -name "x86_64-w64-mingw32-g++" -type f | head -1)
           echo "cxx=$cxx"
           "$cxx" -print-file-name=libstdc++.dll.a || true
           "$cxx" -print-file-name=libstdc++.a || true
           "$cxx" -print-search-dirs || true
           echo "=== does the staged dll export the missing vtables? ==="
           objdump=$(find /nix/store -maxdepth 3 -name "x86_64-w64-mingw32-objdump" -type f | head -1)
-          wlib=$(find /nix/store -maxdepth 2 -path "*widespread_wallet-windows*" -name "libstdc++-6.dll" | head -1)
+          wlib=$(find /nix/store -maxdepth 3 -path "*widespread_wallet-windows*" -name "libstdc++-6.dll" | head -1)
           echo "wlib=$wlib objdump=$objdump"
-          "$objdump" -p "$wlib" 2>/dev/null | grep -c "Export\|_ZTVSt9basic_ios" | head -3
-          "$objdump" -p "$wlib" 2>/dev/null | grep "_ZTVSt9basic_ios\|_ZTVSt15basic_streambuf\|_ZNSt12system_errorC1ESt10error_codePKc\|__once_proxy" | head -8
-          echo "=== protocol archive symbol check ==="
+          "$objdump" -p "$wlib" 2>/dev/null | grep -c "Export" | head -3
+          "$objdump" -p "$wlib" 2>/dev/null | grep "_ZTVSt9basic_ios\|_ZTVSt15basic_streambuf\|_ZNSt12system_errorC1ESt10error_codePKc\|__once_proxy\|_ZSt4cout" | head -10
+          echo "=== protocol archive symbol check (exact file from link line) ==="
           nm=$(find /nix/store -maxdepth 3 -name "x86_64-w64-mingw32-nm" -type f | head -1)
-          prota=$(find /nix/store -name "liblogos_protocol.a" | head -1)
+          prota=$(nix log "$drv" 2>/dev/null | grep -o "/nix/store/[^ ]*liblogos_protocol\.a" | head -1)
+          [ -z "$prota" ] && prota=$(find /nix/store -name "liblogos_protocol.a" | head -1)
           echo "nm=$nm prota=$prota"
+          ls -la "$prota" 2>/dev/null || true
           "$nm" --defined-only "$prota" 2>/dev/null | grep -c basic_json || true
-          "$nm" "$prota" 2>/dev/null | grep "basic_json.*operator" | grep -c " U \| W \| T " || true
-          "$nm" --defined-only "$prota" 2>/dev/null | grep "basic_json" | head -3 || true
-          "$nm" "$prota" 2>/dev/null | head -5 || true
+          "$nm" "$prota" 2>/dev/null | grep -c "basic_json" || true
+          "$nm" -u "$prota" 2>/dev/null | grep -c "refptr" || true
+          "$nm" --defined-only "$prota" 2>/dev/null | grep -c "refptr" || true
           echo "=== which libs provide fstat64i32 / SCard* / _setjmp ==="
-          for lib in mingwex msvcrt ucrtbase winscard msvcrt-os moldname; do
+          for lib in mingwex msvcrt ucrtbase ucrt winscard msvcrt-os moldname; do
             f=$("$cxx" -print-file-name=lib${lib}.a)
             echo "-- $f"
             "$nm" --defined-only "$f" 2>/dev/null | grep -c "fstat64i32\|SCardReleaseContext\|_setjmp" || true
