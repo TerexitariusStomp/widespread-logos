@@ -25,7 +25,7 @@ if(MINGW OR WIN32)
         # implicitly pull libstdc++/its CRT runtime, so name them explicitly.
         stdc++ gcc gcc_eh mingw32 moldname mingwex msvcrt
         kernel32 user32 advapi32 shell32 ws2_32 bcrypt ntdll userenv
-        synchronization pthread mcfgthread
+        synchronization
     )
 endif()
 logos_module(
