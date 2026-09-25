@@ -8950,6 +8950,7 @@ dependencies = [
  "libc",
  "serde",
  "serde_json",
+ "windows-sys 0.61.2",
  "wsp-lez-core",
  "zeroize",
 ]

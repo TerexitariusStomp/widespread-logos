@@ -13,7 +13,10 @@
 
 use std::fs::File;
 use std::io::{self, Read, Write};
+#[cfg(unix)]
 use std::os::unix::io::FromRawFd;
+#[cfg(windows)]
+use std::os::windows::io::{AsRawHandle, FromRawHandle};
 
 use serde::{Deserialize, Serialize};
 use wsp_lez_core::{Op, Output, Worker};
@@ -63,6 +66,7 @@ fn write_frame(stdout: &mut impl Write, payload: &[u8]) -> io::Result<()> {
 /// The upstream wallet engine writes progress with `println!` — fatal on a
 /// channel where stdout is the wire. Move the wire to a duplicated fd and
 /// point fd 1 at /dev/null so upstream prints can't corrupt frames.
+#[cfg(unix)]
 fn take_wire_stdout() -> io::Result<File> {
     unsafe {
         let wire = libc::dup(libc::STDOUT_FILENO);
@@ -74,6 +78,34 @@ fn take_wire_stdout() -> io::Result<File> {
             return Err(io::Error::last_os_error());
         }
         Ok(File::from_raw_fd(wire))
+    }
+}
+
+/// Windows equivalent: duplicate the stdout HANDLE for the wire, then point
+/// the process's standard-output handle at the NUL device so `println!` from
+/// upstream code can't corrupt frames.
+#[cfg(windows)]
+fn take_wire_stdout() -> io::Result<File> {
+    use windows_sys::Win32::Foundation::{DuplicateHandle, DUPLICATE_SAME_ACCESS};
+    use windows_sys::Win32::System::Console::{GetStdHandle, SetStdHandle, STD_OUTPUT_HANDLE};
+    use windows_sys::Win32::System::Threading::GetCurrentProcess;
+
+    unsafe {
+        let me = GetCurrentProcess();
+        let stdout = GetStdHandle(STD_OUTPUT_HANDLE);
+        if stdout.is_null() {
+            return Err(io::Error::last_os_error());
+        }
+        let mut wire = std::ptr::null_mut();
+        if DuplicateHandle(me, stdout, me, &mut wire, 0, 0, DUPLICATE_SAME_ACCESS) == 0 {
+            return Err(io::Error::last_os_error());
+        }
+        // "NUL" is the Windows null device; the File must stay open for the
+        // process lifetime or subsequent println!s hit a closed handle.
+        let nul = File::create("NUL")?;
+        SetStdHandle(STD_OUTPUT_HANDLE, nul.as_raw_handle() as _);
+        std::mem::forget(nul);
+        Ok(File::from_raw_handle(wire))
     }
 }
 
