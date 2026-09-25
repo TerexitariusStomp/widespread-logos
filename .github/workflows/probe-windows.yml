@@ -25,6 +25,12 @@ jobs:
         if: failure()
         run: |
           drv=$(find /nix/store -maxdepth 1 -name "*module-lib-x86_64-w64-mingw32*.drv" | head -1)
-          nix log "$drv" 2>/dev/null | grep -n "link\|Linking\|w64-mingw32.*-o \|CMAKE_CXX\|-lstdc" | tail -60 || true
-          echo "=== full link line ==="
           nix log "$drv" 2>/dev/null | tail -120 || true
+          echo "=== libstdc++ files in store ==="
+          find /nix/store -name "libstdc++*" 2>/dev/null | head -20
+          echo "=== gcc search paths ==="
+          cxx=$(find /nix/store -maxdepth 3 -name "x86_64-w64-mingw32-g++" -type f | head -1)
+          echo "cxx=$cxx"
+          "$cxx" -print-file-name=libstdc++.dll.a || true
+          "$cxx" -print-file-name=libstdc++.a || true
+          "$cxx" -print-search-dirs || true
