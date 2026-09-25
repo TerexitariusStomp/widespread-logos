@@ -144,7 +144,15 @@
             (subst "static.crates.io download"
                "    return f\"https://crates.io/api/v1/crates/{pkg[\"name\"]}/{pkg[\"version\"]}/download\"\n"
                "    return f\"https://static.crates.io/crates/{pkg[\"name\"]}/{pkg[\"name\"]}-{pkg[\"version\"]}.crate\"\n"
-               (builtins.readFile "${rustBuildSupport}/fetch-cargo-vendor-util.py"))));
+            # lee_core-0.1.0 appears in the lockfile twice — upstream tag (via
+            # spel-framework-core's hardcoded git dep, which [patch] cannot
+            # redirect) and the keycard-gate fork branch. Sources are
+            # byte-identical (the branch only touches lez/wallet), so merging
+            # the vendor dir is safe.
+            (subst "git-crate dirs_exist_ok"
+               "    shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func)\n"
+               "    shutil.copytree(crate_tree, crate_out_dir, ignore=ignore_func, dirs_exist_ok=True)\n"
+               (builtins.readFile "${rustBuildSupport}/fetch-cargo-vendor-util.py")))));
         in
         { name, hash, ... }@args:
         let

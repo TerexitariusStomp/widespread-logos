@@ -37,6 +37,7 @@ reqwest = { version = "0.12", default-features = false, features = ["json", "mul
 # default-features = false. All six crates must come from the same source or
 # Cargo builds two `lee` instances and AccountId stops unifying. Revert to
 # the upstream tag once logos-blockchain/logos-execution-zone#924 merges.
+common = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate" }
 wallet = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate", default-features = false }
 lee = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate" }
 lee_core = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate" }

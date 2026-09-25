@@ -94,7 +94,7 @@ rapidsnark). Surfaces that sign or prove need one; view/recover surfaces
 | macOS Apple Silicon | ✅ release variant | ✅ | ✅ |
 | macOS Intel | source build (`x86_64-darwin` flake entry) | ✅ (via fork archive) | ✅ |
 | Windows x86_64 | ✅ release variant (mingw cross) | ✅ | ✅ |
-| Android / iOS | circuits bundles on the fork CI (aarch64); wallet-core mobile port is feature-gated on upstream `keycard_wallet`/`pcsc-sys` — see `docs/provenance.md` | — | ✅ |
+| Android / iOS | circuits bundles build on the fork CI (aarch64); `wsp-lez-core` compiles for `aarch64-linux-android` / `aarch64-apple-ios` with `--no-default-features` (keycard/PCSC off — upstream PR logos-execution-zone#924). `.github/workflows/probe-mobile.yml` is the gate | — | ✅ |
 
 Forks supplying the extra archives: `TerexitariusStomp/logos-blockchain-circuits`
 (macos-x86_64, windows, android, ios legs) and

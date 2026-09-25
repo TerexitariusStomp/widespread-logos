@@ -22,5 +22,5 @@ base64 = "0.22"
 tokio.workspace = true
 reqwest.workspace = true
 borsh = "1"
-common = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
+common.workspace = true
 lee = { workspace = true }
