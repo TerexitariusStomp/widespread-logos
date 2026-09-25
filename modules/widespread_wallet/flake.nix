@@ -304,14 +304,12 @@
           libFile = "widespread_wallet.lib";
 
           # Where the mingw toolchain keeps its runtime DLLs — nixpkgs spreads
-          # them across the unwrapped gcc's outputs (and for some pins the
-          # mingw_w64 package). Every entry is guarded: an absent attribute
-          # resolves to null and drops out of the search list.
+          # them across the unwrapped cross gcc's outputs. (crossPkgs.gcc is a
+          # windows-HOST gcc that refuses to even evaluate here; stdenv.cc.cc
+          # is the cross compiler that built our objects.)
           mingwRtDirs = lib.unique (builtins.filter (p: p != null) [
             (lib.attrByPath [ "stdenv" "cc" "cc" ] null crossPkgs)
             (lib.attrByPath [ "stdenv" "cc" "cc" "lib" ] null crossPkgs)
-            (lib.attrByPath [ "gcc" "cc" ] null crossPkgs)
-            (lib.attrByPath [ "gcc" "cc" "lib" ] null crossPkgs)
             (lib.attrByPath [ "windows" "mingw_w64" ] null crossPkgs)
           ]);
         in
