@@ -8,6 +8,12 @@ license.workspace = true
 [lints]
 workspace = true
 
+[features]
+# Keycard hardware-wallet support (PC/SC). On by default; Android/iOS builds
+# use --no-default-features, which also drops pcsc-sys from the graph.
+default = ["keycard"]
+keycard = ["wallet/keycard"]
+
 [dependencies]
 wallet.workspace = true
 lee.workspace = true

@@ -94,10 +94,10 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 [[package]]
 name = "amm_core"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "borsh",
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "risc0-zkvm",
  "serde",
 ]
@@ -456,9 +456,9 @@ checksum = "4858a9d740c5007a9069007c3b4e91152d0506f13c1b31dd49051fd537656156"
 [[package]]
 name = "associated_token_account_core"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "risc0-zkvm",
  "serde",
 ]
@@ -615,6 +615,14 @@ dependencies = [
 name = "authenticated_transfer_core"
 version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "authenticated_transfer_core"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "serde",
 ]
@@ -870,7 +878,17 @@ name = "bridge_core"
 version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
 dependencies = [
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "risc0-zkvm",
+ "serde",
+]
+
+[[package]]
+name = "bridge_core"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
+dependencies = [
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "risc0-zkvm",
  "serde",
 ]
@@ -888,6 +906,15 @@ dependencies = [
 name = "build_utils"
 version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+dependencies = [
+ "anyhow",
+ "risc0-binfmt",
+]
+
+[[package]]
+name = "build_utils"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "anyhow",
  "risc0-binfmt",
@@ -1124,7 +1151,16 @@ version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
 dependencies = [
  "borsh",
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+]
+
+[[package]]
+name = "clock_core"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
+dependencies = [
+ "borsh",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
 ]
 
 [[package]]
@@ -1164,20 +1200,43 @@ version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
 dependencies = [
  "anyhow",
- "authenticated_transfer_core",
+ "authenticated_transfer_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
  "base64 0.22.1",
  "borsh",
- "clock_core",
+ "clock_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
  "hex",
- "lee",
- "lee_core",
+ "lee 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "lee_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
  "log",
  "logos-blockchain-common-http-client",
- "programs",
+ "programs 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
  "serde",
  "serde_with",
  "sha2 0.10.9",
- "system_accounts",
+ "system_accounts 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "common"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
+dependencies = [
+ "anyhow",
+ "authenticated_transfer_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "base64 0.22.1",
+ "borsh",
+ "clock_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "hex",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "log",
+ "logos-blockchain-common-http-client",
+ "programs 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "serde",
+ "serde_with",
+ "sha2 0.10.9",
+ "system_accounts 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "thiserror 2.0.21",
 ]
 
@@ -2078,7 +2137,16 @@ name = "faucet_core"
 version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
 dependencies = [
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "serde",
+]
+
+[[package]]
+name = "faucet_core"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
+dependencies = [
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "serde",
 ]
 
@@ -3498,18 +3566,18 @@ dependencies = [
 [[package]]
 name = "key_protocol"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "aes-gcm",
  "anyhow",
  "bip39",
- "common",
+ "common 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "hex",
  "hmac-sha512",
  "itertools 0.14.0",
  "k256 0.13.4",
- "lee",
- "lee_core",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "ml-kem",
  "rand 0.8.8",
  "serde",
@@ -3545,12 +3613,12 @@ dependencies = [
 [[package]]
 name = "keycard_wallet"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "bip39",
  "hex",
  "keycard-rs",
- "lee",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "log",
  "pcsc",
  "rand 0.8.8",
@@ -3597,10 +3665,31 @@ source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.
 dependencies = [
  "anyhow",
  "borsh",
- "build_utils",
+ "build_utils 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
  "hex",
  "k256 0.13.4",
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "log",
+ "rand 0.8.8",
+ "risc0-binfmt",
+ "risc0-zkvm",
+ "serde",
+ "serde_with",
+ "sha2 0.10.9",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "lee"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
+dependencies = [
+ "anyhow",
+ "borsh",
+ "build_utils 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "hex",
+ "k256 0.13.4",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "log",
  "rand 0.8.8",
  "risc0-binfmt",
@@ -3615,6 +3704,23 @@ dependencies = [
 name = "lee_core"
 version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+dependencies = [
+ "base58",
+ "borsh",
+ "bytemuck",
+ "bytesize",
+ "chacha20",
+ "ml-kem",
+ "risc0-zkvm",
+ "serde",
+ "serde_with",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "lee_core"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "base58",
  "borsh",
@@ -5847,8 +5953,17 @@ name = "programs"
 version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
 dependencies = [
- "build_utils",
- "lee",
+ "build_utils 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "lee 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+]
+
+[[package]]
+name = "programs"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
+dependencies = [
+ "build_utils 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
 ]
 
 [[package]]
@@ -6921,19 +7036,19 @@ checksum = "cd0b0ec5f1c1ca621c432a25813d8d60c88abe6d3e08a3eb9cf37d97a0fe3d73"
 [[package]]
 name = "sequencer_service_protocol"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
- "common",
+ "common 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "hex",
- "lee",
- "lee_core",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "serde_with",
 ]
 
 [[package]]
 name = "sequencer_service_rpc"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "jsonrpsee",
  "sequencer_service_protocol",
@@ -7299,7 +7414,7 @@ source = "git+https://github.com/logos-co/spel?rev=6c0598a409ab801df843d99a46c04
 dependencies = [
  "base58",
  "borsh",
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
  "serde",
  "serde_json",
  "sha2 0.10.9",
@@ -7518,11 +7633,23 @@ name = "system_accounts"
 version = "0.1.0"
 source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
 dependencies = [
- "bridge_core",
- "clock_core",
- "faucet_core",
- "lee_core",
- "programs",
+ "bridge_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "clock_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "faucet_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "lee_core 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "programs 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+]
+
+[[package]]
+name = "system_accounts"
+version = "0.1.0"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
+dependencies = [
+ "bridge_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "clock_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "faucet_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "programs 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
 ]
 
 [[package]]
@@ -7558,14 +7685,14 @@ dependencies = [
 [[package]]
 name = "testnet_initial_state"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "key_protocol",
- "lee",
- "lee_core",
- "programs",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "programs 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "serde",
- "system_accounts",
+ "system_accounts 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
 ]
 
 [[package]]
@@ -7675,10 +7802,10 @@ checksum = "fd3ca314f692efd6c868f8408f53fe444634a845f96c028b97d35f6a1f79f0ee"
 [[package]]
 name = "token_core"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "borsh",
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "serde",
 ]
 
@@ -8310,9 +8437,9 @@ checksum = "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65"
 [[package]]
 name = "vault_core"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "risc0-zkvm",
  "serde",
 ]
@@ -8336,18 +8463,18 @@ dependencies = [
 [[package]]
 name = "wallet"
 version = "0.1.0"
-source = "git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4#47eba256479f6f785acbd138834340703cd03401"
+source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "amm_core",
  "anyhow",
  "associated_token_account_core",
  "async-stream",
- "authenticated_transfer_core",
+ "authenticated_transfer_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "base58",
  "bip39",
- "bridge_core",
+ "bridge_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "clap",
- "common",
+ "common 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "derive_more",
  "env_logger",
  "futures",
@@ -8358,18 +8485,18 @@ dependencies = [
  "itertools 0.14.0",
  "key_protocol",
  "keycard_wallet",
- "lee",
- "lee_core",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "log",
  "optfield",
- "programs",
+ "programs 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "rand 0.8.8",
  "rpassword",
  "sequencer_service_rpc",
  "serde",
  "serde_json",
  "sha2 0.10.9",
- "system_accounts",
+ "system_accounts 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "testnet_initial_state",
  "thiserror 2.0.21",
  "token_core",
@@ -8893,8 +9020,8 @@ dependencies = [
  "base64 0.22.1",
  "borsh",
  "clap",
- "common",
- "lee",
+ "common 0.1.0 (git+https://github.com/logos-blockchain/logos-execution-zone?tag=v0.2.4)",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "reqwest",
  "serde",
  "serde_json",
@@ -8910,15 +9037,15 @@ dependencies = [
  "base64 0.22.1",
  "bip39",
  "hex",
- "lee",
- "lee_core",
- "programs",
+ "lee 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
+ "programs 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "reqwest",
  "sequencer_service_rpc",
  "serde",
  "serde_json",
  "sha2 0.10.9",
- "system_accounts",
+ "system_accounts 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "tempfile",
  "thiserror 2.0.21",
  "tokio",
@@ -8936,7 +9063,7 @@ dependencies = [
  "getrandom 0.3.4",
  "getrandom 0.4.3",
  "hex",
- "lee_core",
+ "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "serde_json",
  "spel-framework-core",
  "wasm-bindgen",

@@ -32,12 +32,17 @@ reqwest = { version = "0.12", default-features = false, features = ["json", "mul
 
 # Upstream LEZ wallet engine — pinned to the deployed public testnet
 # protocol tag (v0.2.x wire format; matches SPEL's lee_core pin).
-wallet = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
-lee = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
-lee_core = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
-sequencer_service_rpc = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4", features = ["client"] }
-system_accounts = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
-programs = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4", features = ["artifacts"] }
+# TEMPORARY FORK PIN: v0.2.4 + a `keycard` cargo feature only — identical
+# protocol code, but lets mobile builds (Android/iOS, no PC/SC) compile with
+# default-features = false. All six crates must come from the same source or
+# Cargo builds two `lee` instances and AccountId stops unifying. Revert to
+# the upstream tag once logos-blockchain/logos-execution-zone#924 merges.
+wallet = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate", default-features = false }
+lee = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate" }
+lee_core = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate" }
+sequencer_service_rpc = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate", features = ["client"] }
+system_accounts = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate" }
+programs = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", branch = "v0.2.4-keycard-gate", features = ["artifacts"] }
 
 [workspace.lints.rust]
 
