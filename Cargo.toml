@@ -56,3 +56,10 @@ programs = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", 
 # logos-blockchain re-pins.
 [patch."https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark.git"]
 rust-rapidsnark = { git = "https://github.com/TerexitariusStomp/logos-blockchain-rust-rapidsnark.git", rev = "3e69004e2b3f920d83eebb70e348a3d70fbdc270" }
+
+# risc0-zkvm 3.0.6's DefaultProver unconditionally imports std::os::fd /
+# UnixStream (fd-passed r0vm spawn) — cannot compile for windows-gnu.
+# The fork branch cfg(unix)-gates it; ExternalProver ("ipc") still works.
+# Revert when upstream ships a windows-compatible prover module.
+[patch.crates-io]
+risc0-zkvm = { git = "https://github.com/TerexitariusStomp/risc0", rev = "32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4" }

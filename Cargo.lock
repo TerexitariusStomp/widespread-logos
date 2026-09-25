@@ -890,7 +890,7 @@ version = "0.1.0"
 source = "git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate#7a334c27b61f13435e91687aaa8c7fe7e4e1a433"
 dependencies = [
  "anyhow",
- "risc0-binfmt",
+ "risc0-binfmt 3.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3603,7 +3603,7 @@ dependencies = [
  "lee_core 0.1.0 (git+https://github.com/TerexitariusStomp/logos-execution-zone?branch=v0.2.4-keycard-gate)",
  "log",
  "rand 0.8.8",
- "risc0-binfmt",
+ "risc0-binfmt 3.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "risc0-zkvm",
  "serde",
  "serde_with",
@@ -6332,9 +6332,29 @@ dependencies = [
  "elf",
  "lazy_static",
  "postcard",
+ "risc0-zkp 3.0.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "risc0-zkvm-platform 2.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "ruint",
+ "semver",
+ "serde",
+ "tracing",
+]
+
+[[package]]
+name = "risc0-binfmt"
+version = "3.0.5"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
+dependencies = [
+ "anyhow",
+ "borsh",
+ "bytemuck",
+ "derive_more",
+ "elf",
+ "lazy_static",
+ "postcard",
  "rand 0.9.5",
- "risc0-zkp",
- "risc0-zkvm-platform",
+ "risc0-zkp 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkvm-platform 2.2.3 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "ruint",
  "semver",
  "serde",
@@ -6344,8 +6364,7 @@ dependencies = [
 [[package]]
 name = "risc0-build"
 version = "3.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bd8216cdd9f573808a94769767480b06ad1e74ae60841c9582fdf51b8e29ba53"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "anyhow",
  "cargo_metadata",
@@ -6353,10 +6372,10 @@ dependencies = [
  "dirs",
  "docker-generate",
  "hex",
- "risc0-binfmt",
+ "risc0-binfmt 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "risc0-zkos-v1compat",
- "risc0-zkp",
- "risc0-zkvm-platform",
+ "risc0-zkp 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkvm-platform 2.2.3 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "rzup",
  "semver",
  "serde",
@@ -6368,48 +6387,45 @@ dependencies = [
 [[package]]
 name = "risc0-circuit-keccak"
 version = "4.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c731e12429eb4457e1ddc69c56ee7343a1e10b86e4aa55bc8f4d2b13734abb9"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "anyhow",
  "bytemuck",
  "paste",
- "risc0-binfmt",
+ "risc0-binfmt 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "risc0-circuit-recursion",
- "risc0-core",
- "risc0-zkp",
+ "risc0-core 3.0.2 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkp 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "tracing",
 ]
 
 [[package]]
 name = "risc0-circuit-recursion"
 version = "4.0.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "40dd640122abcc67d4d4e4f055c68cbc3ad2efb8589c65c2b23d354632971b60"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "anyhow",
  "bytemuck",
  "hex",
  "metal",
- "risc0-core",
- "risc0-zkp",
+ "risc0-core 3.0.2 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkp 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "tracing",
 ]
 
 [[package]]
 name = "risc0-circuit-rv32im"
 version = "4.0.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cb11231aa4b74bcc0c8d16597893fbd7ea6f6a9ebbc35e16bfd06b467c7ee104"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "anyhow",
  "bit-vec",
  "bytemuck",
  "derive_more",
  "paste",
- "risc0-binfmt",
- "risc0-core",
- "risc0-zkp",
+ "risc0-binfmt 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-core 3.0.2 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkp 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "serde",
  "tracing",
 ]
@@ -6425,10 +6441,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "risc0-core"
+version = "3.0.2"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
+dependencies = [
+ "bytemuck",
+ "rand_core 0.9.5",
+]
+
+[[package]]
 name = "risc0-groth16"
 version = "3.0.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b0ca702ea7d0162766defe7ed6a79bda4a747ad9e2684000a6edd14df0a6d1f3"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "anyhow",
  "ark-bn254",
@@ -6440,20 +6464,19 @@ dependencies = [
  "hex",
  "num-bigint",
  "num-traits",
- "risc0-binfmt",
- "risc0-zkp",
+ "risc0-binfmt 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkp 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "serde",
 ]
 
 [[package]]
 name = "risc0-zkos-v1compat"
 version = "2.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b8b0b598ba7946354b10ca5c56e382de801e6c7fce9fccad0396ec436bc5072b"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "include_bytes_aligned",
  "no_std_strings",
- "risc0-zkvm-platform",
+ "risc0-zkvm-platform 2.2.3 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
 ]
 
 [[package]]
@@ -6473,8 +6496,32 @@ dependencies = [
  "metal",
  "paste",
  "rand_core 0.9.5",
- "risc0-core",
- "risc0-zkvm-platform",
+ "risc0-core 3.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "risc0-zkvm-platform 2.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
+ "sha2 0.10.9",
+ "stability",
+ "tracing",
+]
+
+[[package]]
+name = "risc0-zkp"
+version = "3.0.5"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
+dependencies = [
+ "anyhow",
+ "blake2",
+ "borsh",
+ "bytemuck",
+ "cfg-if",
+ "digest 0.10.7",
+ "hex",
+ "hex-literal",
+ "metal",
+ "paste",
+ "rand_core 0.9.5",
+ "risc0-core 3.0.2 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkvm-platform 2.2.3 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "serde",
  "sha2 0.10.9",
  "stability",
@@ -6484,8 +6531,7 @@ dependencies = [
 [[package]]
 name = "risc0-zkvm"
 version = "3.0.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5d4f24ec767f71a1663a4d24cf9d02b6bfee44c64647cae677227817051007a"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "anyhow",
  "bincode",
@@ -6496,16 +6542,16 @@ dependencies = [
  "hex",
  "lazy-regex",
  "prost 0.13.5",
- "risc0-binfmt",
+ "risc0-binfmt 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "risc0-build",
  "risc0-circuit-keccak",
  "risc0-circuit-recursion",
  "risc0-circuit-rv32im",
- "risc0-core",
+ "risc0-core 3.0.2 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "risc0-groth16",
  "risc0-zkos-v1compat",
- "risc0-zkp",
- "risc0-zkvm-platform",
+ "risc0-zkp 3.0.5 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
+ "risc0-zkvm-platform 2.2.3 (git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4)",
  "rrs-lib",
  "rzup",
  "semver",
@@ -6521,6 +6567,17 @@ name = "risc0-zkvm-platform"
 version = "2.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2eb37a97ff7e8e4ee1b2a1c43ec143b4887759883c343507af9e4787a57914cd"
+dependencies = [
+ "cfg-if",
+ "num_enum",
+ "paste",
+ "stability",
+]
+
+[[package]]
+name = "risc0-zkvm-platform"
+version = "2.2.3"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "bytemuck",
  "cfg-if",
@@ -6803,8 +6860,7 @@ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
 [[package]]
 name = "rzup"
 version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "96909a7ea8fdf7e18da727d7facbc43eea8a4f77635e7ec75a69794dede16fb6"
+source = "git+https://github.com/TerexitariusStomp/risc0?rev=32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4#32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4"
 dependencies = [
  "hex",
  "rsa",
