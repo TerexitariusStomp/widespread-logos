@@ -79,6 +79,11 @@
       # Workspace members needed to build the module crate — manifests of
       # every member must exist for cargo to resolve, so the filter keeps all
       # of crates/ and modules/ plus the root manifest and lockfile.
+      # Directories must always pass: cleanSourceWith prunes a directory
+      # without descending when the filter returns false, and the top-level
+      # "crates"/"modules" dirs themselves don't match the "/crates/"-style
+      # infixes (no trailing slash) — without this the whole trees vanish and
+      # cargo can't read workspace members' manifests.
       walletSource = lib.cleanSourceWith {
         name = "widespread-wallet-source";
         src = widespread-src;
@@ -87,7 +92,8 @@
             sourcePath = toString path;
             baseName = builtins.baseNameOf sourcePath;
           in
-          baseName == "Cargo.toml"
+          type == "directory"
+          || baseName == "Cargo.toml"
           || baseName == "Cargo.lock"
           || lib.hasInfix "/crates/" sourcePath
           || lib.hasInfix "/modules/" sourcePath;

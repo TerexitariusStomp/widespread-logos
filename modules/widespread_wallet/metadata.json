@@ -6,6 +6,7 @@
   "type": "core",
   "interface": "cdylib",
   "category": "wallet",
+  "icon": "src/icons/icon.png",
   "main": "widespread_wallet_plugin",
   "dependencies": [],
   "include": [],

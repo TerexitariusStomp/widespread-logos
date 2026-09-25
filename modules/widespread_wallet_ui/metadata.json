@@ -7,7 +7,7 @@
   "category": "wallet",
   "description": "Widespread LEZ wallet — accounts, transfers, faucet and testimonials in one shared UI",
   "author": "Widespread",
-  "icon": null,
+  "icon": "src/icons/icon.png",
   "view": "qml/WalletView.qml",
   "dependencies": ["widespread_wallet"],
   "codegen": {},
