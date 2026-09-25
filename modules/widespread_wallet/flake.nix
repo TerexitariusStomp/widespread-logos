@@ -229,7 +229,7 @@
           cargoDeps = fetchCargoVendorPatched {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-25SEdioA8zK+dhs+ePCZ+ZIIiGWc+XnUesU/5VJR9cU=";
+            hash = "sha256-v2EAEsRwtU6SydwVOj7oDvZStJfz4mNbvzTr/cAtAwE=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -310,7 +310,7 @@
           cargoDeps = mkFetchCargoVendorPatched pkgs rustToolchain {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-25SEdioA8zK+dhs+ePCZ+ZIIiGWc+XnUesU/5VJR9cU=";
+            hash = "sha256-v2EAEsRwtU6SydwVOj7oDvZStJfz4mNbvzTr/cAtAwE=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -339,7 +339,15 @@
       walletLib = lib.genAttrs systems walletLibFor;
 
       walletLibInput = {
-        packages = lib.mapAttrs (_system: drv: { default = drv; }) walletLib;
+        # The builder resolves external-lib packages as
+        # input.packages.<host-system>.<name>, where <name> comes from the
+        # systems.*.packages.default entry below — so the windows cross
+        # derivation must be exposed under that name on linux hosts.
+        packages = lib.genAttrs systems (system:
+          { default = walletLib.${system}; }
+          // lib.optionalAttrs (lib.hasSuffix "-linux" system) {
+            widespread_wallet-windows-x86_64 = windowsCrossFor system;
+          });
       };
 
       base = logos-module-builder.lib.mkLogosModule {
