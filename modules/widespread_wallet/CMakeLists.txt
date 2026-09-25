@@ -38,7 +38,7 @@ if(MINGW OR WIN32)
     # staged path.
     set(_wsp_win_link_libs
         crypt32
-        stdc++ gcc gcc_eh mingw32 moldname mingwex msvcrt
+        gcc gcc_eh mingw32 moldname mingwex msvcrt
         kernel32 user32 advapi32 shell32 ws2_32 bcrypt ntdll userenv
         synchronization
     )
@@ -46,17 +46,23 @@ if(MINGW OR WIN32)
         list(PREPEND _wsp_win_link_libs
             "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwinpthread.a")
     endif()
+    # nixpkgs' mingw libstdc++.a is dllimport-flavored: the vtables, typeinfo
+    # and std::system_error ctor exist only inside libstdc++-6.dll, and the
+    # toolchain ships no libstdc++.dll.a import library. GNU ld accepts a DLL
+    # as a linker input directly and synthesizes the __imp_*/.refptr.* symbols
+    # from its export table, so the flake stages the runtime DLL beside our
+    # staticlib and we link it by path. The builder's win-dll-link postFixup
+    # then ships the DLL next to the plugin.
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lib/libstdc++-6.dll")
+        list(APPEND _wsp_win_link_libs
+            "${CMAKE_CURRENT_SOURCE_DIR}/lib/libstdc++-6.dll")
+    else()
+        list(APPEND _wsp_win_link_libs stdc++)
+    endif()
     target_link_libraries(widespread_wallet_module_plugin PRIVATE
         ${_wsp_win_link_libs})
-    # -static-libstdc++/-static-libgcc: the rapidsnark/protocol objects need
-    # symbols the shared libstdc++-6.dll never exports (template/inline
-    # instantiations), so the import lib alone cannot satisfy them.
     # --enable-auto-import: objects compiled dllimport-style emit .refptr.*
     # refs that ld only synthesizes under auto-import.
-    # --whole-archive around libstdc++.a: its members define e.g. _ZTVSt9...
-    # but are only REACHABLE via .refptr._ZTV... refs, which ld's lazy archive
-    # scan cannot match to the defining member — pull the archive wholesale.
     target_link_options(widespread_wallet_module_plugin PRIVATE
-        -static-libstdc++ -static-libgcc -Wl,--enable-auto-import
-        -Wl,--whole-archive -lstdc++ -Wl,--no-whole-archive)
+        -static-libgcc -Wl,--enable-auto-import)
 endif()

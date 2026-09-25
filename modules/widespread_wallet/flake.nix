@@ -302,6 +302,18 @@
           };
 
           libFile = "widespread_wallet.lib";
+
+          # Where the mingw toolchain keeps its runtime DLLs — nixpkgs spreads
+          # them across the unwrapped gcc's outputs (and for some pins the
+          # mingw_w64 package). Every entry is guarded: an absent attribute
+          # resolves to null and drops out of the search list.
+          mingwRtDirs = lib.unique (builtins.filter (p: p != null) [
+            (lib.attrByPath [ "stdenv" "cc" "cc" ] null crossPkgs)
+            (lib.attrByPath [ "stdenv" "cc" "cc" "lib" ] null crossPkgs)
+            (lib.attrByPath [ "gcc" "cc" ] null crossPkgs)
+            (lib.attrByPath [ "gcc" "cc" "lib" ] null crossPkgs)
+            (lib.attrByPath [ "windows" "mingw_w64" ] null crossPkgs)
+          ]);
         in
         rustPlatform.buildRustPackage {
           pname = "widespread_wallet-windows";
@@ -339,6 +351,22 @@
             # the same lib/ dir the builder stages next to the module; the
             # module CMakeLists links it by path.
             cp ${crossPkgs.windows.pthreads}/lib/libwinpthread.a $out/lib/
+            # nixpkgs' mingw libstdc++.a is dllimport-flavored — its vtables,
+            # typeinfo and std::system_error ctor live only in libstdc++-6.dll,
+            # and the toolchain ships no .dll.a import library. GNU ld links a
+            # DLL directly, so stage it where the module CMakeLists can link it
+            # by path; the builder's win-dll-link postFixup then ships it next
+            # to the plugin.
+            stdcdll=""
+            for p in ${lib.concatStringsSep " " mingwRtDirs}; do
+              stdcdll=$(find "$p" -name 'libstdc++-6.dll' -print -quit)
+              [ -n "$stdcdll" ] && break
+            done
+            if [ -z "$stdcdll" ]; then
+              echo "libstdc++-6.dll not found in the mingw toolchain outputs" >&2
+              exit 1
+            fi
+            cp "$stdcdll" $out/lib/
             runHook postInstall
           '';
         };
