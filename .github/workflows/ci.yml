@@ -77,6 +77,7 @@ jobs:
           R0VM=$(find "$HOME/.risc0" -name r0vm -type f | head -1)
           echo "RISC0_SERVER_PATH=$R0VM" >> "$GITHUB_ENV"
           "$R0VM" --version || true
+      - name: Check out LEZ upstream at the pinned tag
         run: git clone --depth 1 --branch v0.2.4 https://github.com/logos-blockchain/logos-execution-zone /tmp/lez-upstream
       - name: Build standalone sequencer
         working-directory: /tmp/lez-upstream

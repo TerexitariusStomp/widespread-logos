@@ -70,7 +70,7 @@
         x86_64-darwin = {
           circuitsPlatform = "macos-x86_64";
           circuitsBase = forkCircuitsBase;
-          circuitsHash = "7jwi4zjxpj953i2i179xjx2rp502g21j9rrqi5ysx3d4kalnhrj0";
+          circuitsHash = "sha256-R/JIvuxXpjKiiOGkLrvItwDxRJApZxyL1300MhW1MEs=";
           rapidsnarkUrl = "${iden3Base}/rapidsnark-macOS-x86_64-${rapidsnarkVersion}.zip";
           rapidsnarkHash = "sha256-/GCXzzT5mkBeXkVQAGEF9OmJXXcYz4KoXNzjFvhSgNU=";
         };
@@ -276,12 +276,12 @@
 
           circuits = pkgs.fetchzip {
             url = "${forkCircuitsBase}/logos-blockchain-circuits-v0.5.3-windows-x86_64.tar.gz";
-            sha256 = "jra69q6afl600783gi3nwh18idc3zckb8qw6shhdp8ywkjydhib1";
+            sha256 = "sha256-MiuTsFGOGgAOGi8Oy2FAsbHx2VwIc6MhbBd5PqVvMK4=";
           };
 
           rapidsnark = pkgs.fetchzip {
             url = "https://github.com/TerexitariusStomp/logos-blockchain-rust-rapidsnark/releases/download/rapidsnark-pic-${rapidsnarkVersion}/rapidsnark-windows-x86_64-pic-${rapidsnarkVersion}.zip";
-            sha256 = "wpivpl9rkhpd4d4jr5bnivj5qi48k96x5grp346pdamzjsizz781";
+            sha256 = "sha256-/MZ9acoT3kYakbksG7csOBI0k+nl5TuIuU3VL3X8/6A=";
           };
 
           libFile = "widespread_wallet.lib";
