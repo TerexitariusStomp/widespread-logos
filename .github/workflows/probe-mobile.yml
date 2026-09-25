@@ -1,0 +1,83 @@
+name: Probe mobile wallet-core builds
+
+# Validates that wsp-lez-core compiles for Android and iOS targets with the
+# upstream `keycard` feature disabled (no pcsc-sys in the tree). Build scripts
+# run (circuits/rapidsnark artifact resolution is exercised); linking is not —
+# `cargo check` is the gate. The circuits bundles come from the fork release
+# (upstream does not publish mobile assets yet).
+
+on:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  CIRCUITS_VERSION: v0.5.3
+  RAPIDSNARK_VERSION: v0.0.8
+
+jobs:
+  android-lib:
+    runs-on: ubuntu-latest
+    env:
+      TARGET: aarch64-linux-android
+    steps:
+      - uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - name: Fetch circuits bundle (fork release)
+        run: |
+          curl -fL -o circuits.tar.gz \
+            "https://github.com/TerexitariusStomp/logos-blockchain-circuits/releases/download/${CIRCUITS_VERSION}/logos-blockchain-circuits-${CIRCUITS_VERSION}-android-aarch64.tar.gz"
+          mkdir -p lbc-root && tar -xzf circuits.tar.gz -C lbc-root --strip-components=1
+          echo "LBC_ROOT_DIR=$PWD/lbc-root" >> "$GITHUB_ENV"
+
+      - name: Fetch rapidsnark (iden3 android arm64)
+        run: |
+          curl -fL -o rs.zip \
+            "https://github.com/iden3/rapidsnark/releases/download/${RAPIDSNARK_VERSION}/rapidsnark-android-arm64-${RAPIDSNARK_VERSION}.zip"
+          unzip -o -q rs.zip
+          echo "RAPIDSNARK_LIB_DIR=$PWD/rapidsnark-android-arm64-${RAPIDSNARK_VERSION}/lib" >> "$GITHUB_ENV"
+
+      - name: Configure NDK toolchain for cargo
+        run: |
+          NDK_BIN="$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin"
+          mkdir -p .cargo
+          cat > .cargo/config.toml <<EOF
+          [target.aarch64-linux-android]
+          linker = "$NDK_BIN/aarch64-linux-android26-clang"
+          ar = "$NDK_BIN/llvm-ar"
+          EOF
+          echo "CC_aarch64_linux_android=$NDK_BIN/aarch64-linux-android26-clang" >> "$GITHUB_ENV"
+          echo "AR_aarch64_linux_android=$NDK_BIN/llvm-ar" >> "$GITHUB_ENV"
+
+      - name: cargo check (no keycard / pcsc)
+        run: cargo check -p wsp-lez-core --target aarch64-linux-android --no-default-features
+
+  ios-lib:
+    runs-on: macos-latest
+    env:
+      TARGET: aarch64-apple-ios
+    steps:
+      - uses: actions/checkout@8edcb1bdb4e267140fa742c62e395cd74f332709
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+
+      - name: Fetch circuits bundle (fork release)
+        run: |
+          curl -fL -o circuits.tar.gz \
+            "https://github.com/TerexitariusStomp/logos-blockchain-circuits/releases/download/${CIRCUITS_VERSION}/logos-blockchain-circuits-${CIRCUITS_VERSION}-ios-aarch64.tar.gz"
+          mkdir -p lbc-root && tar -xzf circuits.tar.gz -C lbc-root --strip-components=1
+          echo "LBC_ROOT_DIR=$PWD/lbc-root" >> "$GITHUB_ENV"
+
+      - name: Fetch rapidsnark (iden3 iOS)
+        run: |
+          curl -fL -o rs.zip \
+            "https://github.com/iden3/rapidsnark/releases/download/${RAPIDSNARK_VERSION}/rapidsnark-iOS-${RAPIDSNARK_VERSION}.zip"
+          unzip -o -q rs.zip
+          # iden3's iOS zip has no lib/ subdir — files sit at the archive root.
+          echo "RAPIDSNARK_LIB_DIR=$PWD/rapidsnark-iOS-${RAPIDSNARK_VERSION}" >> "$GITHUB_ENV"
+
+      - name: cargo check (no keycard / pcsc)
+        run: cargo check -p wsp-lez-core --target aarch64-apple-ios --no-default-features
