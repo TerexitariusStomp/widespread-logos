@@ -64,7 +64,19 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: ci-rust
-      - name: Check out LEZ upstream at the pinned tag
+      # The sequencer executes genesis programs through risc0-zkvm's `client`
+      # feature — without `prove`, `default_executor()` is an IPC executor
+      # that shells out to `r0vm` (see lez/docker/risc0-base.Dockerfile
+      # upstream). Missing binary = "No such file or directory" at genesis.
+      - name: Install r0vm
+        run: |
+          curl -L https://risczero.com/install | bash
+          "$HOME/.risc0/bin/rzup" install
+          # Pin the executor's r0vm path directly — the crate looks up a
+          # versioned rzup dir and would miss on any version mismatch.
+          R0VM=$(find "$HOME/.risc0" -name r0vm -type f | head -1)
+          echo "RISC0_SERVER_PATH=$R0VM" >> "$GITHUB_ENV"
+          "$R0VM" --version || true
         run: git clone --depth 1 --branch v0.2.4 https://github.com/logos-blockchain/logos-execution-zone /tmp/lez-upstream
       - name: Build standalone sequencer
         working-directory: /tmp/lez-upstream
