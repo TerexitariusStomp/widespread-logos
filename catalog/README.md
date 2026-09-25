@@ -26,7 +26,7 @@ metadata.json version bump → CI green on main → release-on-merge gate
 Install (once published):
 
 ```bash
-lgpd install https://github.com/widespread-fyi/widespread-logos/releases/download/index/index.json
+lgpd install https://github.com/TerexitariusStomp/widespread-logos/releases/download/index/index.json
 ```
 
 ## Prerequisites for a green release
