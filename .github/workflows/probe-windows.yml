@@ -24,10 +24,20 @@ jobs:
       - name: Dump failed build log
         if: failure()
         run: |
+          echo "=== staged ext-lib output ==="
+          ls -la result*/lib/ 2>/dev/null || true
+          find /nix/store -maxdepth 2 -path "*widespread_wallet-windows*/lib" -exec ls -la {} \; 2>/dev/null | head -20
           drv=$(find /nix/store -maxdepth 1 -name "*module-lib-x86_64-w64-mingw32*.drv" | head -1)
-          nix log "$drv" 2>/dev/null | tail -120 || true
+          echo "=== link command ==="
+          nix log "$drv" 2>/dev/null | grep -m8 "w64-mingw32-g++\|Linking\|FAILED" || true
+          echo "=== undefined reference summary ==="
+          nix log "$drv" 2>/dev/null | grep -o "undefined reference to [\`'][^\`']*[\`']" | sed "s/\`/'/g" | sort | uniq -c | sort -rn | head -40 || true
+          nix log "$drv" 2>/dev/null | tail -40 || true
           echo "=== libstdc++ files in store ==="
           find /nix/store -name "libstdc++*" 2>/dev/null | head -20
+          echo "=== where do shipped dlls point ==="
+          readlink -f /nix/store/*qtbase*mingw32*/bin/libstdc++-6.dll 2>/dev/null || true
+          find /nix/store -name "libstdc++-6.dll" -exec readlink {} \; 2>/dev/null | sort -u | head -10
           echo "=== gcc search paths ==="
           cxx=$(find /nix/store -maxdepth 3 -name "x86_64-w64-mingw32-g++" -type f | head -1)
           echo "cxx=$cxx"
