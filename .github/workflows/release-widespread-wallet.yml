@@ -20,3 +20,4 @@ jobs:
       module_path: modules/widespread_wallet
       # Variants come from the module's flake.nix (#lgx-portable) — the flake
       # is the single source of truth for what is buildable.
+

@@ -18,3 +18,4 @@ jobs:
     # v1 scans non-draft release .lgx URLs directly. Sidecars remain release
     # metadata and part of the release workflow's already-published gate.
     uses: logos-co/logos-modules-release-action/.github/workflows/rebuild-index.yml@v1
+
