@@ -229,7 +229,7 @@
           cargoDeps = fetchCargoVendorPatched {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-v2EAEsRwtU6SydwVOj7oDvZStJfz4mNbvzTr/cAtAwE=";
+            hash = "sha256-ulcjXEgO8GHnNCNyRNixqzh4TvAE5Xio7SXOjhZlR8k=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -310,7 +310,7 @@
           cargoDeps = mkFetchCargoVendorPatched pkgs rustToolchain {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-v2EAEsRwtU6SydwVOj7oDvZStJfz4mNbvzTr/cAtAwE=";
+            hash = "sha256-ulcjXEgO8GHnNCNyRNixqzh4TvAE5Xio7SXOjhZlR8k=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
