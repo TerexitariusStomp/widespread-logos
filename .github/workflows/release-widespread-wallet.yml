@@ -19,5 +19,8 @@ jobs:
     with:
       module_path: modules/widespread_wallet
       # Variants come from the module's flake.nix (#lgx-portable) — the flake
-      # is the single source of truth for what is buildable.
+      # is the single source of truth for what is buildable. windows-x86_64 is
+      # opt-in upstream: it is a mingw cross build realised on the linux-amd64
+      # runner through the flake's packages.x86_64-windows pseudo-system.
+      variants: "darwin-arm64,linux-amd64,linux-arm64,windows-x86_64"
 

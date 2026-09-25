@@ -70,7 +70,7 @@
         x86_64-darwin = {
           circuitsPlatform = "macos-x86_64";
           circuitsBase = forkCircuitsBase;
-          circuitsHash = lib.fakeHash; # set from the fork's v0.5.3 release asset
+          circuitsHash = "7jwi4zjxpj953i2i179xjx2rp502g21j9rrqi5ysx3d4kalnhrj0";
           rapidsnarkUrl = "${iden3Base}/rapidsnark-macOS-x86_64-${rapidsnarkVersion}.zip";
           rapidsnarkHash = "sha256-/GCXzzT5mkBeXkVQAGEF9OmJXXcYz4KoXNzjFvhSgNU=";
         };
@@ -275,8 +275,8 @@
           };
 
           circuits = pkgs.fetchzip {
-            url = "${upstreamCircuitsBase}/logos-blockchain-circuits-v0.5.3-windows-x86_64.tar.gz";
-            sha256 = lib.fakeHash; # pin from the `got:` value on first build
+            url = "${forkCircuitsBase}/logos-blockchain-circuits-v0.5.3-windows-x86_64.tar.gz";
+            sha256 = "jra69q6afl600783gi3nwh18idc3zckb8qw6shhdp8ywkjydhib1";
           };
 
           rapidsnark = pkgs.fetchzip {
@@ -332,6 +332,13 @@
         externalLibInputs.widespread_wallet = {
           input = walletLibInput;
           packages.default = "default";
+          # The windows build is a mingw cross derivation produced on a Linux
+          # builder — it lives under packages.x86_64-linux, not a windows
+          # system attr (same shape as zerokit's rln-windows-x86_64).
+          systems.x86_64-windows = {
+            system = "x86_64-linux";
+            packages.default = "widespread_wallet-windows-x86_64";
+          };
         };
       };
     in
@@ -344,7 +351,13 @@
           widespread_wallet = walletLib.${system};
         } // lib.optionalAttrs (lib.hasSuffix "-linux" system) {
           widespread_wallet-windows-x86_64 = windowsCrossFor system;
-        });
+        })
+        # The windows-x86_64 release variant builds `.#packages.x86_64-windows.lgx-portable`
+        # on a Linux runner. Absent when the pinned builder has no logos-nix —
+        # guard keeps evaluation working either way.
+        // lib.optionalAttrs (base.packages ? x86_64-windows) {
+          x86_64-windows = base.packages.x86_64-windows;
+        };
     } // lib.optionalAttrs (base ? checks) {
       checks = lib.genAttrs systems (system: base.checks.${system} or {});
     };

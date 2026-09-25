@@ -14,4 +14,7 @@ jobs:
     uses: logos-co/logos-modules-release-action/.github/workflows/release.yml@v1
     with:
       module_path: modules/widespread_wallet_ui
+      # QML is platform-independent; windows-x86_64 lets lgpm resolve the
+      # module on Windows installs (built on the linux-amd64 runner).
+      variants: "darwin-arm64,linux-amd64,linux-arm64,windows-x86_64"
 
