@@ -7,8 +7,15 @@ the Logos solutions catalog. PRs 1–3 are filed:
 - **PR 2** → https://github.com/logos-blockchain/logos-execution-zone/pull/923
 - **PR 3** → https://github.com/logos-blockchain/lez-programs/pull/396
   (filed to `lez-programs` — no upstream LPs/specs repo exists)
-- **PR 4** → still blocked — needs the first `release-on-merge` run to
-  publish `.lgx` builds + `index.json` before the catalog entry can land.
+- **PR 4** → unblocked — `.lgx` + `index.json` now publish on release;
+  what remains is the catalog-listing PR against `logos-co/logos-modules-v2`
+  (their merge is the external gate).
+- **PR 5** → https://github.com/logos-blockchain/logos-blockchain-circuits/pull/57
+  (macOS x86_64 + Android/iOS build legs, ptau + gmp fixes)
+- **PR 6** → https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark/pull/2
+  (Windows static archive + target mapping; flags the missing LICENSE)
+- **PR 7** → https://github.com/logos-blockchain/logos-execution-zone/pull/924
+  (`keycard` cargo feature — unblocks Android/iOS wallet-core builds)
 
 Each entry below is self-contained: title, motivation, and the exact
 diff/content.
