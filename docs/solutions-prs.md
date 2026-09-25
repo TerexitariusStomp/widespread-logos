@@ -1,9 +1,17 @@
 # Upstream / solutions PRs — prepared submissions
 
 PRs prepared for upstream (`logos-blockchain/logos-execution-zone`) and
-the Logos solutions catalog. None are filed yet — filing needs GitHub
-auth on the machine (`gh` is not installed). Each entry below is
-self-contained: title, motivation, and the exact diff/content.
+the Logos solutions catalog. PRs 1–3 are filed:
+
+- **PR 1** → https://github.com/logos-blockchain/logos-execution-zone/pull/922
+- **PR 2** → https://github.com/logos-blockchain/logos-execution-zone/pull/923
+- **PR 3** → https://github.com/logos-blockchain/lez-programs/pull/396
+  (filed to `lez-programs` — no upstream LPs/specs repo exists)
+- **PR 4** → still blocked — needs the first `release-on-merge` run to
+  publish `.lgx` builds + `index.json` before the catalog entry can land.
+
+Each entry below is self-contained: title, motivation, and the exact
+diff/content.
 
 ## PR 1 — `wsp-lez`/`lee` wallet: `LEZ_SEQUENCER_URL` env override
 
