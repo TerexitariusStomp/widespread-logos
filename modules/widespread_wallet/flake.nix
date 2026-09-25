@@ -221,7 +221,7 @@
           cargoDeps = fetchCargoVendorPatched {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-6pTxqVkkUr6/s58u+8/r63pDimOA2hcQwxWpPp3IY2o=";
+            hash = pkgs.lib.fakeHash; # cargoDeps after LEZ repin — pin CI got:
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -276,7 +276,7 @@
 
           circuits = pkgs.fetchzip {
             url = "${forkCircuitsBase}/logos-blockchain-circuits-v0.5.3-windows-x86_64.tar.gz";
-            sha256 = "sha256-MiuTsFGOGgAOGi8Oy2FAsbHx2VwIc6MhbBd5PqVvMK4=";
+            sha256 = "sha256-6pTxqVkkUr6/s58u+8/r63pDimOA2hcQwxWpPp3IY2o=";
           };
 
           rapidsnark = pkgs.fetchzip {
@@ -293,7 +293,7 @@
           cargoDeps = mkFetchCargoVendorPatched pkgs rustToolchain {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-6pTxqVkkUr6/s58u+8/r63pDimOA2hcQwxWpPp3IY2o=";
+            hash = pkgs.lib.fakeHash; # cargoDeps after LEZ repin — pin CI got:
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
