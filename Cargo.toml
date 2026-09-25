@@ -63,3 +63,7 @@ rust-rapidsnark = { git = "https://github.com/TerexitariusStomp/logos-blockchain
 # Revert when upstream ships a windows-compatible prover module.
 [patch.crates-io]
 risc0-zkvm = { git = "https://github.com/TerexitariusStomp/risc0", rev = "32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4" }
+# Unify risc0-binfmt onto the same source — otherwise the lockfile carries it
+# from crates.io (via lez build_utils) AND from the fork (zkvm's workspace
+# member), and cargo vendor fails on the duplicated checksum.
+risc0-binfmt = { git = "https://github.com/TerexitariusStomp/risc0", rev = "32e0fdc36d8dc40f5fbe3dded56e57a8bd5916f4" }
