@@ -1,0 +1,8 @@
+name: probe-runners
+on:
+  workflow_dispatch: {}
+jobs:
+  intel-mac:
+    runs-on: macos-13
+    steps:
+      - run: uname -a && sw_vers
