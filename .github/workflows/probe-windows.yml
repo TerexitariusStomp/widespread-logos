@@ -21,3 +21,10 @@ jobs:
         working-directory: modules/widespread_wallet
         run: |
           nix build ".#packages.x86_64-windows.lgx-portable" --print-out-paths
+      - name: Dump failed build log
+        if: failure()
+        run: |
+          drv=$(find /nix/store -maxdepth 1 -name "*module-lib-x86_64-w64-mingw32*.drv" | head -1)
+          nix log "$drv" 2>/dev/null | grep -n "link\|Linking\|w64-mingw32.*-o \|CMAKE_CXX\|-lstdc" | tail -60 || true
+          echo "=== full link line ==="
+          nix log "$drv" 2>/dev/null | tail -120 || true
