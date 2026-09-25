@@ -18,8 +18,20 @@ endif()
 # LogosModule.cmake) implements the plugin entry points; the wallet logic is
 # the Rust staticlib staged by flake.nix's externalLibInputs and linked via
 # EXTERNAL_LIBS (static archive — no runtime copy).
+if(MINGW OR WIN32)
+    set(_wsp_extra_link_libs
+        # The staticlib bundles C++ objects (witness-generator, rapidsnark)
+        # and the protocol archive is C++; the mingw cross link does not
+        # implicitly pull libstdc++/its CRT runtime, so name them explicitly.
+        stdc++ gcc gcc_eh mingw32 moldname mingwex msvcrt
+        kernel32 user32 advapi32 shell32 ws2_32 bcrypt ntdll userenv
+        synchronization pthread mcfgthread
+    )
+endif()
 logos_module(
     NAME widespread_wallet
     EXTERNAL_LIBS
         widespread_wallet
+    LINK_LIBRARIES
+        ${_wsp_extra_link_libs}
 )
