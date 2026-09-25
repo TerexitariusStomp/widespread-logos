@@ -26,12 +26,14 @@ struct Helper {
 impl Helper {
     fn spawn(app: &AppHandle) -> Result<Self> {
         // Tauri resolves externalBin to the platform-suffixed binary in the
-        // bundle; in dev it falls back to `wsp-lezd` on PATH.
+        // bundle; in dev it falls back to `wsp-lezd` on PATH. Bundled
+        // sidecars carry the platform exe suffix (.exe on Windows).
+        let bundled = format!("wsp-lezd{}", std::env::consts::EXE_SUFFIX);
         let resource = app
             .path()
             .resource_dir()
             .ok()
-            .map(|d| d.join("binaries").join("wsp-lezd"));
+            .map(|d| d.join("binaries").join(&bundled));
         let bin = resource
             .filter(|p| p.exists())
             .unwrap_or_else(|| "wsp-lezd".into());
