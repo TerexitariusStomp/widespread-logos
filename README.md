@@ -81,6 +81,26 @@ execute(op, blob) -> (result, blob')
   works end-to-end. Signing ops throw `UnsupportedSurfaceError` — key
   custody stays on signing surfaces.
 
+## Platform support
+
+The proving chain links per-platform prebuilt archives (circuits +
+rapidsnark). Surfaces that sign or prove need one; view/recover surfaces
+(PWA) don't and run anywhere a modern browser runs.
+
+| Platform | Module `.lgx` | CLI / daemon / Tauri | PWA (view + recovery) |
+|---|---|---|---|
+| Linux x86_64 | ✅ release variant | ✅ | ✅ |
+| Linux arm64 | ✅ release variant | ✅ | ✅ |
+| macOS Apple Silicon | ✅ release variant | ✅ | ✅ |
+| macOS Intel | source build (`x86_64-darwin` flake entry) | ✅ (via fork archive) | ✅ |
+| Windows x86_64 | ✅ release variant (mingw cross) | ✅ | ✅ |
+| Android / iOS | circuits bundles on the fork CI (aarch64); wallet-core mobile port is feature-gated on upstream `keycard_wallet`/`pcsc-sys` — see `docs/provenance.md` | — | ✅ |
+
+Forks supplying the extra archives: `TerexitariusStomp/logos-blockchain-circuits`
+(macos-x86_64, windows, android, ios legs) and
+`TerexitariusStomp/logos-blockchain-rust-rapidsnark` (windows-pic archive).
+Both are CI-only deltas pending upstream merge.
+
 ## Ops
 
 `Ping Init Restore Unlock Lock ExportBlob CreateAccount ListAccounts

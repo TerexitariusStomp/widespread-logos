@@ -25,7 +25,7 @@ linked.
 |---|---|---|---|
 | [logos-blockchain/logos-blockchain](https://github.com/logos-blockchain/logos-blockchain) | `f6533aaa9895b7b74d37685312805c56e0adc2d8` | MIT | Consensus/circuit types pulled by `wallet` |
 | [logos-blockchain/logos-blockchain-circuits](https://github.com/logos-blockchain/logos-blockchain-circuits) | tag `v0.5.7` | MIT | Proving circuits |
-| [logos-blockchain/logos-blockchain-rust-rapidsnark](https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark) | `e91187f8ccb5bbfc7bb00dac88169112428da78f` | MIT | Rapidsnark FFI |
+| [logos-blockchain/logos-blockchain-rust-rapidsnark](https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark) | `e91187f8ccb5bbfc7bb00dac88169112428da78f` | **unlicensed upstream** — see gaps below | Rapidsnark FFI bindings (cargo crate) |
 | [keycard-tech/keycard-rs](https://github.com/keycard-tech/keycard-rs) | `9535a657ba04b1e6916de51777e22b4837c1a84d` | MIT OR Apache-2.0 | Hardware-wallet (Keycard) support in `wallet`; pulls `pcsc-sys` |
 | [EspressoSystems/jellyfish](https://github.com/EspressoSystems/jellyfish) | `8d80230358e900f8d63765a937f63f4978ca1daa` + tag `jf-crhf-v0.2.0` | MIT | Zero-knowledge primitives |
 | [arkworks-rs/spongefish](https://github.com/arkworks-rs/spongefish) | `3ded547f7f56d7f8a1fc4c9a5c0ce965310bba5f` | MIT OR Apache-2.0 | Fiat-Shamir transcript library |
@@ -59,6 +59,29 @@ All other transitive crates resolve from crates.io and are recorded in
 | [`logos-storage/logos-storage-go-bindings`](https://github.com/logos-storage/logos-storage-go-bindings) | Apache-2.0 | Native worker → Logos Storage blob persistence (planned) |
 | [`logos-storage/logos-storage-go`](https://github.com/logos-storage/logos-storage-go) | MIT OR Apache-2.0 | Storage node REST client under the Go bindings (planned) |
 
+## Proving-chain native components (inside the prebuilt archives)
+
+The LEZ client stack fetches per-platform tarballs at build time
+(`circuits-build` + `rust-rapidsnark` download steps). These contain
+compiled third-party natives:
+
+| Component | Repo | License | In the bundle |
+|---|---|---|---|
+| rapidsnark (Groth16 prover) | iden3/rapidsnark | **LGPL-3.0** | `lib/*.a` (static) |
+| circomlib (gadget circuits) | iden3/circomlib | **LGPL-3.0** | compiled into `lib{pol,poq,signature,poc}.a` |
+| witnesscalc runtime | iden3/witnesscalc | unlicensed upstream | `*/include/{circom,calcwit,fr}.hpp` headers |
+| GMP (bignum) | gmplib.org | **LGPL-3.0** | `lib/libgmp.a` |
+| mman-win32 | alan8rwt/mman-win32 | MIT | `lib/libmman.a` (Windows bundle only) |
+| chkstk stub | circuits `.github/resources` | Apache-2.0/MIT (repo license) | Windows bundle only |
+| circom (compiler) | iden3/circom | GPL-3.0 | **build-time tool only** — not shipped; its generated output is not GPL-covered |
+
+## Forks (ours — CI/packaging deltas only, upstreamed via PR)
+
+| Fork | Why | Delta |
+|---|---|---|
+| `TerexitariusStomp/logos-blockchain-circuits` | upstream never published `macos-x86_64` or mobile bundles | +CI legs `build-macos-x86_64`, `build-android`, `build-ios`; `android-lib`/`ios-lib` Makefile targets; GMP `CPP_FOR_BUILD` fix on newer Xcode; proving-key reuse instead of re-downloading the ptau |
+| `TerexitariusStomp/logos-blockchain-rust-rapidsnark` | no Windows target/archive upstream | +`build-windows` CI leg (MSYS2/MinGW, upstream's own Windows patch resources) producing `rapidsnark-windows-x86_64-pic` archive; +windows mapping in `download_rapidsnark.sh` |
+
 ## Reference-only (never vendored or linked)
 
 | Repository | License status | Use |
@@ -74,5 +97,25 @@ All other transitive crates resolve from crates.io and are recorded in
 - Qt WebView/QML runtime is **LGPL-3.0** and is consumed only as a
   dynamically linked system/runtime dependency via nix — never vendored,
   never statically linked — consistent with LGPL obligations.
+- `rapidsnark`, `circomlib`, and `GMP` are **LGPL-3.0** and ship as static
+  objects inside the circuit/rapidsnark archives, which are linked into
+  `libwidespread_wallet.a` and hence into `.lgx` modules. LGPL-3.0 §4(d)(0)
+  relinkability is satisfied because the whole build is reproducible from
+  source: `nix build` on this repo re-fetches pinned archives and
+  recompiles everything else, and the archive provenance (repo + CI job)
+  is documented above. Anyone distributing a closed variant additionally
+  needs the LGPL components' own relink story — ours is source-available.
+- `circom` is **GPL-3.0** but is a compiler invoked at circuit-build time;
+  generated witness-generator sources are not derivatives of circom, so
+  shipped binaries are not GPL-covered.
+- Known gap: `logos-blockchain-rust-rapidsnark` carries **no license file**
+  upstream. An issue requesting MIT OR Apache-2.0 (the ecosystem default)
+  is part of the upstream-PR batch; until it lands, treat the crate as
+  all-rights-reserved-but-clearly-intended-open (it is a public
+  logos-blockchain repo consumed by the public LEZ stack).
 - All cargo git deps are pinned to exact commit SHAs in `Cargo.toml` and
   `Cargo.lock`; npm deps are locked by `package-lock.json`.
+- Custom code in this repo is glue only: the `wsp-lez-core` stateless
+  worker, the native-messaging daemon, packaging/CI config, and the three
+  SPEL programs. No custom cryptography, prover, or witness generator —
+  the intent is <5% project-specific code on top of upstream OSS.
