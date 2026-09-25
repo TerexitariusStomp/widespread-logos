@@ -282,10 +282,19 @@
             rustc = rustToolchain;
           };
 
-          circuits = pkgs.fetchzip {
-            url = "${forkCircuitsBase}/logos-blockchain-circuits-v0.5.3-windows-x86_64.tar.gz";
-            sha256 = "sha256-6pTxqVkkUr6/s58u+8/r63pDimOA2hcQwxWpPp3IY2o=";
-          };
+          # The windows bundle ships `pol.lib`-style names (MSVC convention);
+          # rustc on windows-gnu only searches `lib{name}.a`, so rename the
+          # GNU ar archives to what the linker expects.
+          circuits = pkgs.runCommand "lbc-circuits-windows" { } ''
+            cp -R ${pkgs.fetchzip {
+              url = "${forkCircuitsBase}/logos-blockchain-circuits-v0.5.3-windows-x86_64.tar.gz";
+              sha256 = "sha256-6pTxqVkkUr6/s58u+8/r63pDimOA2hcQwxWpPp3IY2o=";
+            }} "$out"
+            chmod -R +w "$out"
+            for f in "$out"/*/*.lib; do
+              mv "$f" "$(dirname "$f")/lib$(basename "$f" .lib).a"
+            done
+          '';
 
           rapidsnark = pkgs.fetchzip {
             url = "https://github.com/TerexitariusStomp/logos-blockchain-rust-rapidsnark/releases/download/rapidsnark-pic-${rapidsnarkVersion}/rapidsnark-windows-x86_64-pic-${rapidsnarkVersion}.zip";

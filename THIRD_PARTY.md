@@ -24,8 +24,8 @@ linked.
 | Repository | Pin | License | Role |
 |---|---|---|---|
 | [logos-blockchain/logos-blockchain](https://github.com/logos-blockchain/logos-blockchain) | `f6533aaa9895b7b74d37685312805c56e0adc2d8` | MIT | Consensus/circuit types pulled by `wallet` |
-| [logos-blockchain/logos-blockchain-circuits](https://github.com/logos-blockchain/logos-blockchain-circuits) | tag `v0.5.7` | MIT | Proving circuits |
-| [logos-blockchain/logos-blockchain-rust-rapidsnark](https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark) | `e91187f8ccb5bbfc7bb00dac88169112428da78f` | **unlicensed upstream** — see gaps below | Rapidsnark FFI bindings (cargo crate) |
+| [logos-blockchain/logos-blockchain-circuits](https://github.com/logos-blockchain/logos-blockchain-circuits) | tag `v0.5.3` (transitively pinned by `logos-blockchain` rev `e2a1c3b`) | MIT | Proving circuits |
+| [logos-blockchain/logos-blockchain-rust-rapidsnark](https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark) | upstream `e91187f` patched to fork rev `3e69004` (`windows-archive`) via `[patch]` in `Cargo.toml` | **unlicensed upstream** — see gaps below | Rapidsnark FFI bindings (cargo crate) |
 | [keycard-tech/keycard-rs](https://github.com/keycard-tech/keycard-rs) | `9535a657ba04b1e6916de51777e22b4837c1a84d` | MIT OR Apache-2.0 | Hardware-wallet (Keycard) support in `wallet`; pulls `pcsc-sys` |
 | [EspressoSystems/jellyfish](https://github.com/EspressoSystems/jellyfish) | `8d80230358e900f8d63765a937f63f4978ca1daa` + tag `jf-crhf-v0.2.0` | MIT | Zero-knowledge primitives |
 | [arkworks-rs/spongefish](https://github.com/arkworks-rs/spongefish) | `3ded547f7f56d7f8a1fc4c9a5c0ce965310bba5f` | MIT OR Apache-2.0 | Fiat-Shamir transcript library |
@@ -80,7 +80,7 @@ compiled third-party natives:
 | Fork | Why | Delta |
 |---|---|---|
 | `TerexitariusStomp/logos-blockchain-circuits` | upstream never published `macos-x86_64` or mobile bundles | +CI legs `build-macos-x86_64`, `build-android`, `build-ios`; `android-lib`/`ios-lib` Makefile targets; GMP `CPP_FOR_BUILD` fix on newer Xcode; proving-key reuse instead of re-downloading the ptau |
-| `TerexitariusStomp/logos-blockchain-rust-rapidsnark` | no Windows target/archive upstream | +`build-windows` CI leg (MSYS2/MinGW, upstream's own Windows patch resources) producing `rapidsnark-windows-x86_64-pic` archive; +windows mapping in `download_rapidsnark.sh` |
+| `TerexitariusStomp/logos-blockchain-rust-rapidsnark` | no Windows target/archive upstream | +`build-windows` CI leg (MSYS2/MinGW, upstream's own Windows patch resources) producing `rapidsnark-windows-x86_64-pic` archive; +windows mapping in `download_rapidsnark.sh`; `c_ulonglong` fix for `groth16_verify` on Windows LLP64; flat-layout fix for iden3's iOS zip |
 
 ## Reference-only (never vendored or linked)
 
