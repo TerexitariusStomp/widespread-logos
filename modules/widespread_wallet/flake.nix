@@ -221,7 +221,7 @@
           cargoDeps = fetchCargoVendorPatched {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = pkgs.lib.fakeHash; # cargoDeps after LEZ repin — pin CI got:
+            hash = "sha256-B9dYCxoKVXfitjbMh7iBN4J+1UQUuKtAjlpnPY8aatE=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -293,7 +293,7 @@
           cargoDeps = mkFetchCargoVendorPatched pkgs rustToolchain {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = pkgs.lib.fakeHash; # cargoDeps after LEZ repin — pin CI got:
+            hash = "sha256-B9dYCxoKVXfitjbMh7iBN4J+1UQUuKtAjlpnPY8aatE=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
