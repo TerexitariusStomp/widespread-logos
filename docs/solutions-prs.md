@@ -17,6 +17,14 @@ the Logos solutions catalog. PRs 1–3 are filed:
 - **PR 7** → https://github.com/logos-blockchain/logos-execution-zone/pull/924
   (`keycard` cargo feature — unblocks Android/iOS wallet-core builds)
 
+**Platform status** (fork releases are live regardless of upstream merge):
+`TerexitariusStomp/logos-blockchain-circuits` `v0.5.3` publishes 7 bundles —
+linux x86_64/aarch64, macOS aarch64/x86_64, windows x86_64, **android aarch64,
+ios aarch64**. `TerexitariusStomp/logos-blockchain-rust-rapidsnark`
+`rapidsnark-pic-v0.0.8` adds the Windows PIC archive. `wsp-lez-core` compiles
+for `aarch64-linux-android`/`aarch64-apple-ios` via `--no-default-features`
+(keycard gate, verified by `.github/workflows/probe-mobile.yml`).
+
 Each entry below is self-contained: title, motivation, and the exact
 diff/content.
 

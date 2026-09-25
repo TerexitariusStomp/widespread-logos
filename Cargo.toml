@@ -48,3 +48,11 @@ programs = { git = "https://github.com/TerexitariusStomp/logos-execution-zone", 
 [workspace.lints.rust]
 
 [workspace.lints.clippy]
+
+# rust-rapidsnark pinned by upstream logos-blockchain (rev e91187f) fails to
+# compile for x86_64-pc-windows-gnu (c_ulong vs u64 on LLP64). Redirect the
+# git source to our windows-archive branch — same code + Windows fixes.
+# Revert when logos-blockchain-rust-rapidsnark#2 merges upstream and
+# logos-blockchain re-pins.
+[patch."https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark.git"]
+rust-rapidsnark = { git = "https://github.com/TerexitariusStomp/logos-blockchain-rust-rapidsnark.git", rev = "3e69004e2b3f920d83eebb70e348a3d70fbdc270" }

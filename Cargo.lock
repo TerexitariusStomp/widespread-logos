@@ -6656,7 +6656,7 @@ checksum = "48fd7bd8a6377e15ad9d42a8ec25371b94ddc67abe7c8b9127bec79bebaaae18"
 [[package]]
 name = "rust-rapidsnark"
 version = "0.1.3"
-source = "git+https://github.com/logos-blockchain/logos-blockchain-rust-rapidsnark.git?rev=e91187f8ccb5bbfc7bb00dac88169112428da78f#e91187f8ccb5bbfc7bb00dac88169112428da78f"
+source = "git+https://github.com/TerexitariusStomp/logos-blockchain-rust-rapidsnark.git?rev=3e69004e2b3f920d83eebb70e348a3d70fbdc270#3e69004e2b3f920d83eebb70e348a3d70fbdc270"
 dependencies = [
  "anyhow",
  "cc",
