@@ -18,20 +18,34 @@ endif()
 # LogosModule.cmake) implements the plugin entry points; the wallet logic is
 # the Rust staticlib staged by flake.nix's externalLibInputs and linked via
 # EXTERNAL_LIBS (static archive — no runtime copy).
-if(MINGW OR WIN32)
-    set(_wsp_extra_link_libs
-        # The staticlib bundles C++ objects (witness-generator, rapidsnark)
-        # and the protocol archive is C++; the mingw cross link does not
-        # implicitly pull libstdc++/its CRT runtime, so name them explicitly.
-        stdc++ gcc gcc_eh mingw32 moldname mingwex msvcrt
-        kernel32 user32 advapi32 shell32 ws2_32 bcrypt ntdll userenv
-        synchronization
-    )
-endif()
 logos_module(
     NAME widespread_wallet
     EXTERNAL_LIBS
         widespread_wallet
-    LINK_LIBRARIES
-        ${_wsp_extra_link_libs}
 )
+
+if(MINGW OR WIN32)
+    # These must sit AFTER logos_module() so they land at the END of the link
+    # line — liblogos_protocol.a and the Qt archives (added by the macro)
+    # carry the same libstdc++ undefineds, and GNU ld only looks backward.
+    #
+    # The Rust staticlib bundles C++ objects (witness-generator, rapidsnark)
+    # that need the C++ runtime; rustls-platform-verifier's Schannel path
+    # wants the certificate store API (crypt32); and the rapidsnark objects
+    # were built against winpthreads — which nixpkgs' mingw sysroot lacks (it
+    # builds against mcfgthread), so the flake's windows cross package ships
+    # the static archive alongside libwidespread_wallet.a for us to link by
+    # staged path.
+    set(_wsp_win_link_libs
+        crypt32
+        stdc++ gcc gcc_eh mingw32 moldname mingwex msvcrt
+        kernel32 user32 advapi32 shell32 ws2_32 bcrypt ntdll userenv
+        synchronization
+    )
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwinpthread.a")
+        list(PREPEND _wsp_win_link_libs
+            "${CMAKE_CURRENT_SOURCE_DIR}/lib/libwinpthread.a")
+    endif()
+    target_link_libraries(widespread_wallet_module_plugin PRIVATE
+        ${_wsp_win_link_libs})
+endif()

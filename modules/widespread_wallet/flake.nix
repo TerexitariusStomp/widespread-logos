@@ -229,7 +229,7 @@
           cargoDeps = fetchCargoVendorPatched {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-25SEdioA8zK+dhs+ePCZ+ZIIiGWc+XnUesU/5VJR9cU=";
+            hash = "sha256-v2EAEsRwtU6SydwVOj7oDvZStJfz4mNbvzTr/cAtAwE=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -310,7 +310,7 @@
           cargoDeps = mkFetchCargoVendorPatched pkgs rustToolchain {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-25SEdioA8zK+dhs+ePCZ+ZIIiGWc+XnUesU/5VJR9cU=";
+            hash = "sha256-v2EAEsRwtU6SydwVOj7oDvZStJfz4mNbvzTr/cAtAwE=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -332,6 +332,13 @@
               exit 1
             fi
             cp "$ffi_lib" $out/lib/
+            # The rapidsnark objects merged into the staticlib call
+            # pthread_mutex_* — winpthreads, which the module plugin link
+            # cannot see (nixpkgs mingw builds against mcfgthread, so no
+            # -lpthread exists on its sysroot). Ship the static archive in
+            # the same lib/ dir the builder stages next to the module; the
+            # module CMakeLists links it by path.
+            cp ${crossPkgs.windows.pthreads}/lib/libwinpthread.a $out/lib/
             runHook postInstall
           '';
         };
