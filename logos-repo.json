@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "name": "widespread-wallet",
+  "displayName": "Widespread Wallet",
+  "version": "0.1.0",
+  "description": "Privacy-preserving LEZ wallet for Logos Basecamp — key custody, provider SDK, approval-gated signing, faucet + on-chain testimonials, client-side encrypted recovery on Logos Storage.",
+  "author": "Widespread",
+  "license": "MIT OR Apache-2.0",
+  "homepage": "https://widespread.fyi",
+  "indexUrl": "https://github.com/widespread-fyi/widespread-logos/releases/download/index/index.json",
+  "trustedSigners": [],
+  "modules": [
+    {
+      "name": "widespread_wallet",
+      "path": "modules/widespread_wallet",
+      "type": "core",
+      "metadata": "modules/widespread_wallet/metadata.json"
+    },
+    {
+      "name": "widespread_wallet_ui",
+      "path": "modules/widespread_wallet_ui",
+      "type": "ui_qml",
+      "metadata": "modules/widespread_wallet_ui/metadata.json"
+    }
+  ],
+  "dependencies": {
+    "modules": [],
+    "runtime": ["qt6.qtdeclarative", "qt6.qtwebview"]
+  }
+}

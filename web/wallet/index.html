@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f1114" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon-192.png" />
+    <title>Widespread Wallet</title>
+    <style>
+      :root { color-scheme: dark; }
+      body {
+        margin: 0;
+        font: 14px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+        background: #0f1114;
+        color: #e6e9ee;
+      }
+      .wsp-wallet { max-width: 720px; margin: 0 auto; padding: 16px; }
+      .wsp-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+      .wsp-tabs button {
+        background: #1c2027; color: #9aa4b2; border: 1px solid #2a303a;
+        border-radius: 6px; padding: 6px 14px; cursor: pointer;
+      }
+      .wsp-tabs button.active { color: #fff; border-color: #4a7dff; }
+      .wsp-error { color: #ff7a7a; }
+      .wsp-notice { color: #8fd48f; word-break: break-all; }
+      input, select, textarea {
+        display: block; width: 100%; box-sizing: border-box; margin: 6px 0;
+        background: #1c2027; color: #e6e9ee; border: 1px solid #2a303a;
+        border-radius: 6px; padding: 8px 10px;
+      }
+      textarea { min-height: 90px; }
+      button[type="submit"], form button {
+        background: #4a7dff; color: #fff; border: 0; border-radius: 6px;
+        padding: 8px 18px; cursor: pointer;
+      }
+      button[type="submit"]:disabled { background: #2a303a; color: #68707c; }
+      label { display: inline-flex; gap: 6px; align-items: center; margin: 4px 0; }
+      label input { display: inline; width: auto; margin: 0; }
+      code { word-break: break-all; color: #9db4ff; }
+      ul { padding-left: 18px; }
+      pre { background: #1c2027; padding: 12px; border-radius: 6px; overflow: auto; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./bundle.js"></script>
+    <script>
+      if ('serviceWorker' in navigator && window.isSecureContext)
+        navigator.serviceWorker.register('./sw.js')
+    </script>
+  </body>
+</html>

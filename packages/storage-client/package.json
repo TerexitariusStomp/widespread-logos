@@ -1,0 +1,23 @@
+{
+  "name": "@widespread/storage-client",
+  "version": "0.1.0",
+  "description": "Logos Storage (Codex) client \u2014 vault blob + share upload/download, registry artifact mirroring",
+  "type": "module",
+  "main": "src/index.ts",
+  "license": "MIT OR Apache-2.0",
+  "dependencies": {
+    "@codex-storage/sdk-js": "^0.1.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/widespread-fyi/widespread-logos",
+    "directory": "packages/storage-client"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}

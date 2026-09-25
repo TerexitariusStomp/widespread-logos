@@ -1,0 +1,21 @@
+[package]
+name = "wsp-lezd"
+description = "Widespread LEZ native-messaging host — the extension-side wallet worker daemon"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "wsp-lezd"
+path = "src/main.rs"
+
+[dependencies]
+wsp-lez-core = { path = "../wsp-lez-core" }
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+zeroize.workspace = true
+libc = "0.2"

@@ -1,0 +1,186 @@
+{
+  "accounts": [
+    {
+      "name": "PointerRecord",
+      "type": {
+        "fields": [
+          {
+            "name": "publisher",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "value",
+            "type": "string"
+          }
+        ],
+        "kind": "struct"
+      }
+    }
+  ],
+  "errors": [],
+  "instructions": [
+    {
+      "accounts": [
+        {
+          "init": true,
+          "name": "record",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": "ptr"
+              },
+              {
+                "kind": "arg",
+                "path": "key"
+              }
+            ]
+          },
+          "signer": false,
+          "writable": true
+        },
+        {
+          "init": false,
+          "name": "publisher",
+          "signer": true,
+          "writable": false
+        }
+      ],
+      "args": [
+        {
+          "name": "key",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "name": "publish"
+    },
+    {
+      "accounts": [
+        {
+          "init": false,
+          "name": "entry",
+          "signer": false,
+          "writable": false
+        }
+      ],
+      "args": [
+        {
+          "name": "registry_program_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        },
+        {
+          "name": "registered_at",
+          "type": "u64"
+        }
+      ],
+      "name": "register_self"
+    },
+    {
+      "accounts": [
+        {
+          "init": false,
+          "name": "entry",
+          "signer": false,
+          "writable": false
+        }
+      ],
+      "args": [
+        {
+          "name": "registry_program_id",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        }
+      ],
+      "name": "update_self"
+    }
+  ],
+  "name": "pointer",
+  "types": [],
+  "version": "0.1.0"
+}

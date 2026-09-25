@@ -1,0 +1,23 @@
+{
+  "name": "@widespread/recovery",
+  "version": "0.1.0",
+  "description": "Widespread recovery kit \u2014 2-of-3 Shamir shares, PRF-derived storage pointers, passphrase-sealed kits",
+  "type": "module",
+  "main": "src/index.ts",
+  "license": "MIT OR Apache-2.0",
+  "dependencies": {
+    "shamir-secret-sharing": "^0.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/widespread-fyi/widespread-logos",
+    "directory": "packages/recovery"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}

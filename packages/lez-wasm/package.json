@@ -1,0 +1,24 @@
+{
+  "name": "@widespread/lez-wasm",
+  "version": "0.1.0",
+  "license": "MIT OR Apache-2.0",
+  "description": "Vendored wasm32 build of upstream LEZ non-prover codecs (account ids, PDAs, ML-KEM-768 viewing decrypt). Source: crates/wsp-lez-wasm.",
+  "type": "module",
+  "main": "./wsp_lez_wasm.js",
+  "types": "./wsp_lez_wasm.d.ts",
+  "files": [
+    "wsp_lez_wasm.js",
+    "wsp_lez_wasm.d.ts",
+    "wsp_lez_wasm_bg.wasm",
+    "wsp_lez_wasm_bg.wasm.d.ts",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/widespread-fyi/widespread-logos",
+    "directory": "packages/lez-wasm"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

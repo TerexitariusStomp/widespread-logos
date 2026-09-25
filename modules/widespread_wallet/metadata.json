@@ -1,0 +1,31 @@
+{
+  "name": "widespread_wallet",
+  "version": "0.1.0",
+  "description": "Widespread LEZ zone wallet \u2014 key custody, provider SDK and approval flows",
+  "author": "Widespread",
+  "type": "core",
+  "interface": "cdylib",
+  "category": "wallet",
+  "main": "widespread_wallet_plugin",
+  "dependencies": [],
+  "include": [],
+  "capabilities": [],
+  "codegen": {
+    "lidl": "widespread_wallet.lidl"
+  },
+  "nix": {
+    "external_libraries": [
+      {
+        "name": "widespread_wallet"
+      }
+    ],
+    "packages": {
+      "build": [],
+      "runtime": []
+    },
+    "cmake": {
+      "find_packages": [],
+      "extra_include_dirs": []
+    }
+  }
+}

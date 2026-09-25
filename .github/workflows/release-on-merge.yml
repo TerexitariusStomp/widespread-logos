@@ -1,0 +1,84 @@
+name: Release on merge
+
+# Publishes both wallet modules once `main` is green and the declared version
+# has no complete release yet — forked from logos-co/lez-faucet's workflow of
+# the same name, which documents why the trigger is "CI completed on main" and
+# the decision is a state question ("is this version published?"), not an event
+# one. Version skew between the two modules is refused: the UI calls slots a
+# mismatched core may not implement.
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+      core_needed: ${{ steps.check.outputs.core_needed }}
+      ui_needed: ${{ steps.check.outputs.ui_needed }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Both modules must declare the same version, and may need releasing
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          core=$(jq -er .version modules/widespread_wallet/metadata.json)
+          ui=$(jq -er .version modules/widespread_wallet_ui/metadata.json)
+          echo "widespread_wallet=$core widespread_wallet_ui=$ui"
+          if [[ "$core" != "$ui" ]]; then
+            echo "::error::version skew — core is $core but ui is $ui. Release them together."
+            exit 1
+          fi
+          echo "version=$core" >> "$GITHUB_OUTPUT"
+          needs_release() {
+            local tag="$1" assets
+            assets=$(gh api "repos/$REPO/releases/tags/$tag" --jq '[.assets[].name]' 2>/dev/null) || {
+              echo "  $tag: no release" >&2
+              echo true
+              return
+            }
+            if jq -e 'any(.[]; endswith(".lgx")) and any(.[]; . == "sidecar.json")' <<<"$assets" >/dev/null; then
+              echo "  $tag: published" >&2
+              echo false
+            else
+              echo "  $tag: partial ($assets)" >&2
+              echo true
+            fi
+          }
+          echo "core_needed=$(needs_release "widespread_wallet-v$core")" >> "$GITHUB_OUTPUT"
+          echo "ui_needed=$(needs_release "widespread_wallet_ui-v$ui")" >> "$GITHUB_OUTPUT"
+
+  release-core:
+    needs: gate
+    if: needs.gate.outputs.core_needed == 'true'
+    permissions:
+      contents: write
+    uses: logos-co/logos-modules-release-action/.github/workflows/release.yml@v1
+    with:
+      module_path: modules/widespread_wallet
+
+  release-ui:
+    needs: [gate, release-core]
+    if: needs.gate.outputs.ui_needed == 'true'
+    permissions:
+      contents: write
+    uses: logos-co/logos-modules-release-action/.github/workflows/release.yml@v1
+    with:
+      module_path: modules/widespread_wallet_ui

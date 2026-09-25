@@ -1,0 +1,26 @@
+[package]
+name = "wsp-lez"
+description = "Widespread LEZ wallet CLI — thin client over the wsp-lez-core worker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "wsp-lez"
+path = "src/main.rs"
+
+[dependencies]
+wsp-lez-core = { path = "../wsp-lez-core" }
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+clap.workspace = true
+base64 = "0.22"
+tokio.workspace = true
+reqwest.workspace = true
+borsh = "1"
+common = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
+lee = { workspace = true }

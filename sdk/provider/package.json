@@ -1,0 +1,20 @@
+{
+  "name": "@widespread/lez-provider",
+  "version": "0.1.0",
+  "description": "Widespread LEZ Wallet Provider SDK \u2014 connect, approve, transact",
+  "type": "module",
+  "main": "src/index.ts",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/widespread-fyi/widespread-logos",
+    "directory": "sdk/provider"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}

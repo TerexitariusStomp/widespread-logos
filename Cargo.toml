@@ -1,0 +1,44 @@
+[workspace]
+resolver = "3"
+exclude = ["third_party", "programs"]
+members = [
+    "crates/wsp-lez-core",
+    "crates/wsp-lezd",
+    "crates/wsp-lez",
+    "modules/widespread_wallet",
+    "crates/wsp-lez-wasm",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+
+[workspace.dependencies]
+# workspace lints defined under [workspace.lints]
+
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+clap = { version = "4", features = ["derive"] }
+zeroize = { version = "1", features = ["derive"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+bip39 = "2"
+tempfile = "3"
+reqwest = { version = "0.12", default-features = false, features = ["json", "multipart", "rustls-tls"] }
+
+# Upstream LEZ wallet engine — pinned to the deployed public testnet
+# protocol tag (v0.2.x wire format; matches SPEL's lee_core pin).
+wallet = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
+lee = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
+lee_core = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
+sequencer_service_rpc = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4", features = ["client"] }
+system_accounts = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4" }
+programs = { git = "https://github.com/logos-blockchain/logos-execution-zone", tag = "v0.2.4", features = ["artifacts"] }
+
+[workspace.lints.rust]
+
+[workspace.lints.clippy]

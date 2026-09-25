@@ -1,0 +1,11 @@
+target/
+node_modules/
+dist/
+*.blob
+.wsp-lez/
+Cargo.lock.bak
+__pycache__/
+.DS_Store
+
+# Reference checkouts — fetch via scripts/fetch-deps.sh
+third_party/

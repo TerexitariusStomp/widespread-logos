@@ -1,0 +1,27 @@
+{
+  "name": "widespread_wallet_ui",
+  "display_name": "Widespread Wallet",
+  "version": "0.1.0",
+  "type": "ui_qml",
+  "interface": "universal",
+  "category": "wallet",
+  "description": "Widespread LEZ wallet — accounts, transfers, faucet and testimonials in one shared UI",
+  "author": "Widespread",
+  "icon": null,
+  "view": "qml/WalletView.qml",
+  "dependencies": ["widespread_wallet"],
+  "codegen": {},
+  "nix": {
+    "packages": {
+      "build": [],
+      "runtime": ["qt6.qtdeclarative", "qt6.qtwebview"]
+    },
+    "external_libraries": [],
+    "cmake": {
+      "find_packages": [],
+      "extra_sources": [],
+      "extra_include_dirs": [],
+      "extra_link_libraries": []
+    }
+  }
+}

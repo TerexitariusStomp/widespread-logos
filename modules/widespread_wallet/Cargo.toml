@@ -1,0 +1,18 @@
+[package]
+name = "widespread_wallet"
+description = "Widespread LEZ wallet LogosCore module — hosts wsp-lez-core as a cdylib plugin"
+version.workspace = true
+edition = "2021"
+license.workspace = true
+
+[lints]
+workspace = true
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+wsp-lez-core = { path = "../../crates/wsp-lez-core" }
+logos-rust-sdk = { git = "https://github.com/logos-co/logos-rust-sdk", rev = "bcc36420d7a15fb39cbf8079c85a18650cdae968" }
+serde_json.workspace = true
+anyhow.workspace = true

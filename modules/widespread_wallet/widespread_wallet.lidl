@@ -1,0 +1,13 @@
+module widespread_wallet {
+  version "0.1.0"
+  description "Widespread LEZ zone wallet — key custody, provider SDK and approval flows"
+  method execute(op: bstr) -> bstr description "Run one worker op; returns the JSON Output envelope"
+  method connect(dapp_info: bstr) -> bstr description "dApp connection request -> {approved, accounts} or {error: needs_approval}"
+  method get_accounts() -> bstr description "Wallet accounts the caller may see (per-dApp gate applied)"
+  method get_balance(account: tstr) -> bstr description "Balance for a Public/<id>; private balances need per-account approval"
+  method propose_transaction(request: bstr) -> bstr description "Propose a call for approval -> {tx_hash} once approved"
+  method get_status() -> bstr description "Sequencer endpoint, sync state, protocol fingerprint"
+  event approvalRequested(requestId: int, payload: bstr)
+  event transactionUpdated(requestId: int, payload: bstr)
+  event accountsChanged(payload: bstr)
+}

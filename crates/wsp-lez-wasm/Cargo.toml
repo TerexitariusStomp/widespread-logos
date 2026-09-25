@@ -1,0 +1,27 @@
+[package]
+name = "wsp-lez-wasm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "wasm32 facade over upstream LEZ non-prover codecs: account ids, PDAs, ML-KEM-768 viewing-key decapsulation, private note decrypt"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wasm-bindgen = "0.2"
+lee_core = { workspace = true, features = ["host"] }
+# SPEL framework — same pinned rev the on-chain programs build against, so
+# seed_from_str/compute_pda stay byte-identical with guest-side derivation.
+spel-framework-core = { git = "https://github.com/logos-co/spel", rev = "6c0598a409ab801df843d99a46c04a13105df663" }
+borsh = "1"
+serde_json = "1"
+hex = "0.4"
+# wasm32-unknown-unknown: every getrandom version in the tree needs its
+# JS backend enabled via a direct dependency (features unify transitively).
+getrandom_02 = { package = "getrandom", version = "0.2", features = ["js"] }
+getrandom_03 = { package = "getrandom", version = "0.3", features = ["wasm_js"] }
+getrandom_04 = { package = "getrandom", version = "0.4", features = ["wasm_js"] }
+
+[lints]
+workspace = true

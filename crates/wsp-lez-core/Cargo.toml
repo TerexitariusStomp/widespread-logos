@@ -1,0 +1,30 @@
+[package]
+name = "wsp-lez-core"
+description = "Widespread LEZ wallet worker — stateless execute(op, blob) protocol over the upstream LEZ wallet engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+wallet.workspace = true
+lee.workspace = true
+lee_core.workspace = true
+sequencer_service_rpc.workspace = true
+system_accounts.workspace = true
+programs.workspace = true
+sha2 = "0.10"
+anyhow.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+zeroize.workspace = true
+tempfile.workspace = true
+tracing.workspace = true
+reqwest.workspace = true
+bip39.workspace = true
+base64 = "0.22"
+hex = "0.4"

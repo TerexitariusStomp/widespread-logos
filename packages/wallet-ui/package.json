@@ -1,0 +1,29 @@
+{
+  "name": "@widespread/wallet-ui",
+  "version": "0.1.0",
+  "description": "Shared Widespread LEZ wallet UI \u2014 one codebase over pluggable backends",
+  "type": "module",
+  "main": "src/index.ts",
+  "license": "MIT OR Apache-2.0",
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@widespread/recovery": "0.1.0",
+    "@widespread/lez-registry": "0.1.0",
+    "@widespread/lez-wasm": "0.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/widespread-fyi/widespread-logos",
+    "directory": "packages/wallet-ui"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}

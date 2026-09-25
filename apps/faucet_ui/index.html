@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Widespread — LEZ testnet faucet</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 34rem; margin: 3rem auto; padding: 0 1rem; }
+    input, select, button { display: block; width: 100%; margin: .4rem 0; padding: .6rem; box-sizing: border-box; }
+    .err { color: #b91c1c; } .ok { color: #15803d; } .muted { color: #666; font-size: .85rem; }
+    code { word-break: break-all; } table { width: 100%; } td { padding: .2rem .4rem; }
+  </style>
+</head>
+<body>
+  <h1>LEZ testnet faucet</h1>
+  <p class="muted">One drop per account per rate window — the wallet solves the Piñata proof-of-work locally.</p>
+  <div id="app"></div>
+  <script type="module" src="./dist/bundle.js"></script>
+</body>
+</html>

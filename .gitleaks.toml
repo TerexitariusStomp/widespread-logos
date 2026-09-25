@@ -1,0 +1,14 @@
+title = "widespread-logos gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "vendored upstream checkouts, build artifacts, test fixtures"
+paths = [
+  '''third_party/.*''',
+  '''target/.*''',
+  '''node_modules/.*''',
+  '''.*test.*''',
+  '''.*fixture.*''',
+]

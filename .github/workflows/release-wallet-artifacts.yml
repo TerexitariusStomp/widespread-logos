@@ -1,0 +1,111 @@
+name: release-wallet-artifacts
+
+# Publishes the consumer-facing artifacts Rooted and other hosts install:
+# wsp-lezd / wsp-lez binaries per platform and npm tarballs of the
+# publishable packages. Trigger on tags shaped `wallet-v*` (e.g.
+# wallet-v0.1.0); the tag suffix becomes the dist version.
+
+on:
+  push:
+    tags: ['wallet-v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'dist version (e.g. 0.1.0)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            triple: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            triple: aarch64-apple-darwin
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: system deps (linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libpcsclite-dev pkg-config
+      - name: resolve version
+        id: v
+        run: |
+          V="${{ github.event.inputs.version }}"
+          if [ -z "$V" ]; then V="${GITHUB_REF_NAME#wallet-v}"; fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+      - name: build binaries
+        run: scripts/dist.sh --version "${{ steps.v.outputs.version }}" --skip-npm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.triple }}
+          path: dist/bin/
+
+  npm-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: resolve version
+        id: v
+        run: |
+          V="${{ github.event.inputs.version }}"
+          if [ -z "$V" ]; then V="${GITHUB_REF_NAME#wallet-v}"; fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+      - name: pack packages
+        run: scripts/dist.sh --version "${{ steps.v.outputs.version }}" --skip-cargo
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-npm
+          path: |
+            dist/npm/
+            dist/install-host.sh
+
+  release:
+    needs: [build, npm-packages]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          path: .
+          merge-multiple: false
+      - name: merge dist trees
+        run: |
+          mkdir -p dist
+          find . -maxdepth 1 -type d -name 'dist-*' | while read -r d; do
+            [ -d "$d/bin" ] && { mkdir -p dist/bin; cp "$d"/bin/* dist/bin/; }
+            [ -d "$d/npm" ] && { mkdir -p dist/npm; cp "$d"/npm/* dist/npm/; }
+            [ -f "$d/install-host.sh" ] && cp "$d/install-host.sh" dist/
+          done
+          V="${{ github.event.inputs.version }}"
+          [ -z "$V" ] && V="${GITHUB_REF_NAME#wallet-v}"
+          (cd dist && { find npm bin -type f | sort | xargs sha256sum; sha256sum install-host.sh; } > SHA256SUMS.txt)
+          python3 - "$V" <<'PY'
+          import hashlib, json, os, sys
+          version = sys.argv[1]
+          arts = []
+          for root, _, files in os.walk('dist'):
+              for f in sorted(files):
+                  if f in ('manifest.json', 'SHA256SUMS.txt'):
+                      continue
+                  path = os.path.join(root, f)
+                  kind = 'npm' if f.endswith('.tgz') else ('bin' if '/bin/' in path else 'misc')
+                  arts.append({'file': path[len('dist/'):],
+                               'sha256': hashlib.sha256(open(path,'rb').read()).hexdigest(),
+                               'kind': kind})
+          json.dump({'version': version, 'artifacts': arts},
+                    open('dist/manifest.json','w'), indent=2)
+          PY
+      - name: release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/**

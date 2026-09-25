@@ -1,0 +1,110 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+  workflow_dispatch: {}
+
+# release-on-merge.yml gates on this workflow's success on main.
+jobs:
+  rust:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Install pcsc-lite (Ubuntu)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libpcsclite-dev libclang-dev
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ci-rust
+      - run: cargo clippy --workspace -- -D warnings
+      - run: cargo test --workspace
+
+  typescript:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710e4504905 # v6.0.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck packages
+        run: |
+          npx tsc --noEmit --jsx react-jsx --module esnext \
+            --moduleResolution bundler --target es2022 --strict --skipLibCheck \
+            packages/wallet-ui/src/index.ts sdk/registry/src/index.ts \
+            packages/recovery/src/index.ts packages/storage-client/src/index.ts
+      - name: Build web wallet bundle
+        run: npm --workspace @widespread/wallet-web run build
+
+  e2e-standalone:
+    # Full wallet flow against a self-contained sequencer, verified locally:
+    # upstream's `standalone` feature swaps bedrock/indexer for in-process
+    # mocks and the `testnet` genesis ships the pinata faucet, so
+    # init → faucet claim → transfer runs with no external services. Guest
+    # program .bin artifacts are committed upstream, so no risc0/docker step.
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install system deps
+        run: sudo apt-get update && sudo apt-get install -y libpcsclite-dev libclang-dev protobuf-compiler
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ci-rust
+      - name: Check out LEZ upstream at the pinned tag
+        run: git clone --depth 1 --branch v0.2.4 https://github.com/logos-blockchain/logos-execution-zone /tmp/lez-upstream
+      - name: Build standalone sequencer
+        working-directory: /tmp/lez-upstream
+        run: cargo build -p sequencer_service --features standalone --release
+      - name: Build wsp-lez CLI
+        run: cargo build -p wsp-lez --release
+      - name: Run standalone sequencer
+        working-directory: /tmp/lez-upstream
+        run: |
+          mkdir -p /tmp/seq-home
+          nohup ./target/release/sequencer_service \
+            lez/sequencer/service/configs/debug/sequencer_config.json \
+            --port 3040 --listen-address 127.0.0.1 --home /tmp/seq-home \
+            > /tmp/sequencer.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf -X POST http://127.0.0.1:3040 \
+              -H 'content-type: application/json' \
+              -d '{"jsonrpc":"2.0","id":1,"method":"getAccount","params":{"account_id":"EfQhKQAkX2FJiwNii2WFQsGndjvF1Mzd7RuVe7QdPLw7"}}' \
+              | grep -q '"balance":1500000' && exit 0
+            sleep 1
+          done
+          echo "sequencer did not come up"; tail -50 /tmp/sequencer.log; exit 1
+      - name: Wallet e2e — init, faucet claim, transfer
+        env:
+          WSP_SEQUENCER_URL: http://127.0.0.1:3040
+        run: |
+          set -euxo pipefail
+          WSP=./target/release/wsp-lez
+          # The upstream wallet engine prints config notices to stdout before
+          # the JSON result — `awk '/^{$/,0'` keeps only the JSON document.
+          $WSP --vault /tmp/vault.blob init
+          ALICE=$($WSP --vault /tmp/vault.blob new-account alice | awk '/^{$/,0' | jq -r .account_id)
+          $WSP --vault /tmp/vault.blob faucet-info | awk '/^{$/,0' | jq -e '.can_claim == true'
+          $WSP --vault /tmp/vault.blob faucet-claim "$ALICE" | awk '/^{$/,0' | jq -e '.balance_after == "150"'
+          BOB=$($WSP --vault /tmp/vault.blob new-account bob | awk '/^{$/,0' | jq -r .account_id)
+          $WSP --vault /tmp/vault.blob transfer "$ALICE" --to "$BOB" 50 | awk '/^{$/,0' | jq -e .hash
+          # Standalone blocks land on block_create_timeout (15s) — poll.
+          for i in $(seq 1 12); do
+            BAL=$($WSP --vault /tmp/vault.blob balance "$BOB" | awk '/^{$/,0' | jq -r .balance)
+            [ "$BAL" = "50" ] && exit 0
+            sleep 8
+          done
+          echo "transfer never landed (bob=$BAL)"; tail -30 /tmp/sequencer.log; exit 1

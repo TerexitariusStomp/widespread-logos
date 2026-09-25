@@ -1,0 +1,20 @@
+{
+  "name": "@widespread/lez-registry",
+  "version": "0.1.0",
+  "description": "LP-0023 LEZ program registry client \u2014 register, update, and look up program entries on-chain",
+  "type": "module",
+  "main": "src/index.ts",
+  "license": "MIT OR Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/widespread-fyi/widespread-logos",
+    "directory": "sdk/registry"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ]
+}

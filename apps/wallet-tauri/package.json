@@ -1,0 +1,11 @@
+{
+  "name": "@widespread/wallet-tauri",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT OR Apache-2.0",
+  "description": "Desktop shell hosting the shared wallet-ui; wsp-lezd sidecar provides signing",
+  "scripts": {
+    "dev": "npm --workspace @widespread/wallet-web run build && cd src-tauri && cargo tauri dev",
+    "build": "npm --workspace @widespread/wallet-web run build && cd src-tauri && cargo tauri build"
+  }
+}

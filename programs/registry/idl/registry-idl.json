@@ -1,0 +1,481 @@
+{
+  "accounts": [
+    {
+      "name": "RegistryEntry",
+      "type": {
+        "fields": [
+          {
+            "name": "program_id",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "author",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "kind",
+            "type": "u8"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "version",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "type": "string"
+          },
+          {
+            "name": "idl_cid",
+            "type": "string"
+          },
+          {
+            "name": "source_cid",
+            "type": "string"
+          },
+          {
+            "name": "repo_url",
+            "type": "string"
+          },
+          {
+            "name": "commit",
+            "type": "string"
+          },
+          {
+            "name": "build_config",
+            "type": "string"
+          },
+          {
+            "name": "registered_at",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    }
+  ],
+  "errors": [],
+  "instructions": [
+    {
+      "accounts": [
+        {
+          "init": true,
+          "name": "entry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": "deployer_entry"
+              },
+              {
+                "kind": "arg",
+                "path": "program"
+              }
+            ]
+          },
+          "signer": false,
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "program",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        },
+        {
+          "name": "registered_at",
+          "type": "u64"
+        }
+      ],
+      "name": "register_deployer"
+    },
+    {
+      "accounts": [
+        {
+          "init": false,
+          "name": "entry",
+          "signer": false,
+          "writable": false
+        }
+      ],
+      "args": [
+        {
+          "name": "program",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        },
+        {
+          "name": "registered_at",
+          "type": "u64"
+        }
+      ],
+      "name": "register_self"
+    },
+    {
+      "accounts": [
+        {
+          "init": true,
+          "name": "entry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": "third_party_entry"
+              },
+              {
+                "kind": "account",
+                "path": "program"
+              },
+              {
+                "kind": "account",
+                "path": "author"
+              }
+            ]
+          },
+          "signer": false,
+          "writable": true
+        },
+        {
+          "init": false,
+          "name": "program",
+          "signer": false,
+          "writable": false
+        },
+        {
+          "init": false,
+          "name": "author",
+          "signer": true,
+          "writable": false
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        },
+        {
+          "name": "registered_at",
+          "type": "u64"
+        }
+      ],
+      "name": "register_third_party"
+    },
+    {
+      "accounts": [
+        {
+          "init": false,
+          "name": "entry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": "deployer_entry"
+              },
+              {
+                "kind": "arg",
+                "path": "program"
+              }
+            ]
+          },
+          "signer": false,
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "program",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        }
+      ],
+      "name": "update_deployer"
+    },
+    {
+      "accounts": [
+        {
+          "init": false,
+          "name": "entry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": "third_party_entry"
+              },
+              {
+                "kind": "account",
+                "path": "program"
+              },
+              {
+                "kind": "account",
+                "path": "author"
+              }
+            ]
+          },
+          "signer": false,
+          "writable": true
+        },
+        {
+          "init": false,
+          "name": "program",
+          "signer": false,
+          "writable": false
+        },
+        {
+          "init": false,
+          "name": "author",
+          "signer": true,
+          "writable": false
+        }
+      ],
+      "args": [
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        }
+      ],
+      "name": "update_third_party"
+    },
+    {
+      "accounts": [
+        {
+          "init": false,
+          "name": "entry",
+          "signer": false,
+          "writable": false
+        }
+      ],
+      "args": [
+        {
+          "name": "version",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "tags",
+          "type": "string"
+        },
+        {
+          "name": "idl_cid",
+          "type": "string"
+        },
+        {
+          "name": "source_cid",
+          "type": "string"
+        },
+        {
+          "name": "repo_url",
+          "type": "string"
+        },
+        {
+          "name": "commit",
+          "type": "string"
+        },
+        {
+          "name": "build_config",
+          "type": "string"
+        }
+      ],
+      "name": "update_self"
+    }
+  ],
+  "name": "registry",
+  "types": [],
+  "version": "0.1.0"
+}
