@@ -53,6 +53,10 @@ if(MINGW OR WIN32)
     # instantiations), so the import lib alone cannot satisfy them.
     # --enable-auto-import: objects compiled dllimport-style emit .refptr.*
     # refs that ld only synthesizes under auto-import.
+    # --whole-archive around libstdc++.a: its members define e.g. _ZTVSt9...
+    # but are only REACHABLE via .refptr._ZTV... refs, which ld's lazy archive
+    # scan cannot match to the defining member — pull the archive wholesale.
     target_link_options(widespread_wallet_module_plugin PRIVATE
-        -static-libstdc++ -static-libgcc -Wl,--enable-auto-import)
+        -static-libstdc++ -static-libgcc -Wl,--enable-auto-import
+        -Wl,--whole-archive -lstdc++ -Wl,--no-whole-archive)
 endif()
