@@ -48,4 +48,11 @@ if(MINGW OR WIN32)
     endif()
     target_link_libraries(widespread_wallet_module_plugin PRIVATE
         ${_wsp_win_link_libs})
+    # -static-libstdc++/-static-libgcc: the rapidsnark/protocol objects need
+    # symbols the shared libstdc++-6.dll never exports (template/inline
+    # instantiations), so the import lib alone cannot satisfy them.
+    # --enable-auto-import: objects compiled dllimport-style emit .refptr.*
+    # refs that ld only synthesizes under auto-import.
+    target_link_options(widespread_wallet_module_plugin PRIVATE
+        -static-libstdc++ -static-libgcc -Wl,--enable-auto-import)
 endif()
