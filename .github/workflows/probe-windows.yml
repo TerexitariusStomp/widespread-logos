@@ -1,0 +1,23 @@
+name: Probe windows cross build
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  windows-lib:
+    # Validates the mingw cross derivation before a release burns a version
+    # on it. Builds the same attr the release's windows-x86_64 leg realises.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: logos-co/setup-nix-cache-action@781f072122f4df6af0e33a7d355ebd20283e019e # v1.2.0
+      - name: Build windows wallet static lib
+        working-directory: modules/widespread_wallet
+        run: |
+          nix build ".#packages.x86_64-linux.widespread_wallet-windows-x86_64" --print-out-paths
+      - name: Build windows .lgx bundle (builder pseudo-system)
+        working-directory: modules/widespread_wallet
+        run: |
+          nix build ".#packages.x86_64-windows.lgx-portable" --print-out-paths

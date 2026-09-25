@@ -281,7 +281,7 @@
 
           rapidsnark = pkgs.fetchzip {
             url = "https://github.com/TerexitariusStomp/logos-blockchain-rust-rapidsnark/releases/download/rapidsnark-pic-${rapidsnarkVersion}/rapidsnark-windows-x86_64-pic-${rapidsnarkVersion}.zip";
-            sha256 = lib.fakeHash; # set once the fork's rapidsnark-pic-v0.0.8 release lands
+            sha256 = "wpivpl9rkhpd4d4jr5bnivj5qi48k96x5grp346pdamzjsizz781";
           };
 
           libFile = "widespread_wallet.lib";
