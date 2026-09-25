@@ -197,7 +197,7 @@
           cargoDeps = fetchCargoVendorPatched {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = lib.fakeHash; # TODO(ci): first build prints the real hash
+            hash = "sha256-rQ91Ga5q0i9j7x8lIgGg//FUZPB56aHFrBF+g0TtfZg=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
