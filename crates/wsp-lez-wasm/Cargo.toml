@@ -17,11 +17,22 @@ spel-framework-core = { git = "https://github.com/TerexitariusStomp/spel", branc
 borsh = "1"
 serde_json = "1"
 hex = "0.4"
+# HD key-tree derivation (keys.rs) — same primitives upstream key_protocol
+# uses, same pinned majors, so mnemonic→keys stays byte-identical.
+bip39 = "2"
+hmac-sha512 = "1.1"
+sha2 = "0.10"
+k256 = { version = "0.13.3", features = ["arithmetic"] }
 # wasm32-unknown-unknown: every getrandom version in the tree needs its
 # JS backend enabled via a direct dependency (features unify transitively).
 getrandom_02 = { package = "getrandom", version = "0.2", features = ["js"] }
 getrandom_03 = { package = "getrandom", version = "0.3", features = ["wasm_js"] }
 getrandom_04 = { package = "getrandom", version = "0.4", features = ["wasm_js"] }
+
+[dev-dependencies]
+# Host-only parity harness: drives the REAL wallet through wsp-lez-core and
+# diffs keys.rs output byte-for-byte (no duplicated-derivation drift).
+wsp-lez-core = { path = "../wsp-lez-core", default-features = false }
 
 [lints]
 workspace = true

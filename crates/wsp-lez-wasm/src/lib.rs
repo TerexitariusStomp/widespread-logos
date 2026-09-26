@@ -25,6 +25,8 @@ use lee_core::{
 use spel_framework_core::pda::{compute_pda, compute_private_pda, seed_from_str};
 use wasm_bindgen::prelude::*;
 
+mod keys;
+
 fn hex_bytes(s: &str) -> Option<Vec<u8>> {
     hex::decode(s.trim()).ok()
 }
@@ -201,6 +203,35 @@ pub fn private_account_id_b58(
     AccountId::for_private_account(&npk, &vpk, &kind)
         .to_string()
         .into()
+}
+
+// ---------------------------------------------------------------------------
+// Mnemonic → keys (HD tree; byte-parity with key_protocol — see keys.rs)
+// ---------------------------------------------------------------------------
+
+/// Private-account viewing bundle for a BIP-39 mnemonic. `path_json` is the HD
+/// chain-index path of the account node (e.g. `"[0]"` — the wallet's first
+/// private account); `identifier` is the u128 receiver diversifier as a
+/// decimal string ("0" is the wallet default). Returns JSON
+/// `{account_id, npk, vpk, d, z}` — viewing material only, never nsk.
+#[wasm_bindgen]
+pub fn lez_private_keys_from_mnemonic(
+    mnemonic: &str,
+    path_json: &str,
+    identifier: &str,
+) -> Option<String> {
+    let path: Vec<u32> = serde_json::from_str(path_json).ok()?;
+    let identifier: u128 = identifier.parse().ok()?;
+    keys::private_account_json(mnemonic, &path, identifier)
+}
+
+/// Public-account identity for a BIP-39 mnemonic. `path_json` is the HD
+/// chain-index path (e.g. `"[0]"`). Returns JSON `{account_id, pk_x}` — no
+/// secret material crosses the boundary.
+#[wasm_bindgen]
+pub fn lez_public_keys_from_mnemonic(mnemonic: &str, path_json: &str) -> Option<String> {
+    let path: Vec<u32> = serde_json::from_str(path_json).ok()?;
+    keys::public_account_json(mnemonic, &path)
 }
 
 /// Decode a borsh `Account` (public account `data`-adjacent shapes or a
