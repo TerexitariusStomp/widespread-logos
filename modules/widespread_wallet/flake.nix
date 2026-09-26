@@ -77,7 +77,7 @@
         x86_64-darwin = {
           circuitsPlatform = "macos-x86_64";
           circuitsBase = forkCircuitsBase;
-          circuitsHash = "sha256-R/JIvuxXpjKiiOGkLrvItwDxRJApZxyL1300MhW1MEs=";
+          circuitsHash = "sha256-FRvwX/bGkuZ+ru2ChETiwhLnCHN2NKCqSTGEybPa0U4=";
           rapidsnarkUrl = "${iden3Base}/rapidsnark-macOS-x86_64-${rapidsnarkVersion}.zip";
           rapidsnarkHash = "sha256-/GCXzzT5mkBeXkVQAGEF9OmJXXcYz4KoXNzjFvhSgNU=";
         };
@@ -236,7 +236,7 @@
           cargoDeps = fetchCargoVendorPatched {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-bxQRGNmO5TAMFIhRSG0M6VXJCan87tqXJ2blu4YrCho=";
+            hash = "sha256-q0iti3M3i3yalLlqRC9pqyFzsFm+lwk+YjJL60u2a98=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
@@ -327,7 +327,7 @@
           cargoDeps = mkFetchCargoVendorPatched pkgs rustToolchain {
             name = "widespread_wallet-0.1.0";
             src = walletSource;
-            hash = "sha256-bxQRGNmO5TAMFIhRSG0M6VXJCan87tqXJ2blu4YrCho=";
+            hash = "sha256-q0iti3M3i3yalLlqRC9pqyFzsFm+lwk+YjJL60u2a98=";
           };
           cargoBuildFlags = [ "-p" "widespread_wallet" ];
           doCheck = false;
