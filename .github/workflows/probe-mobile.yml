@@ -104,7 +104,7 @@ jobs:
           # The bundle's libgmp.a is a fat archive (arm64 + arm64e) — thin
           # it in place or rustc rejects it when merging into a staticlib.
           find lbc-root -name '*.a' | while read -r a; do
-            if lipo -info "$a" 2>/dev/null | grep -q 'fat file'; then
+            if lipo -info "$a" 2>/dev/null | grep -q '^Architectures in the fat file'; then
               lipo -thin arm64 "$a" -o "$a.thin" && mv "$a.thin" "$a"
             fi
           done
@@ -120,7 +120,7 @@ jobs:
           # archive reader cannot merge it into a staticlib ("Unsupported
           # archive identifier"). Thin any fat archive to the device slice.
           find "rapidsnark-iOS-${RAPIDSNARK_VERSION}" -name '*.a' | while read -r a; do
-            if lipo -info "$a" 2>/dev/null | grep -q 'fat file'; then
+            if lipo -info "$a" 2>/dev/null | grep -q '^Architectures in the fat file'; then
               lipo -thin arm64 "$a" -o "$a.thin" && mv "$a.thin" "$a"
             fi
           done
