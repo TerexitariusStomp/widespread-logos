@@ -101,6 +101,13 @@ jobs:
           curl -fL -o circuits.tar.gz \
             "https://github.com/TerexitariusStomp/logos-blockchain-circuits/releases/download/${CIRCUITS_VERSION}/logos-blockchain-circuits-${CIRCUITS_VERSION}-ios-aarch64.tar.gz"
           mkdir -p lbc-root && tar -xzf circuits.tar.gz -C lbc-root --strip-components=1
+          # The bundle's libgmp.a is a fat archive (arm64 + arm64e) — thin
+          # it in place or rustc rejects it when merging into a staticlib.
+          find lbc-root -name '*.a' | while read -r a; do
+            if lipo -info "$a" 2>/dev/null | grep -q 'fat file'; then
+              lipo -thin arm64 "$a" -o "$a.thin" && mv "$a.thin" "$a"
+            fi
+          done
           echo "LBC_ROOT_DIR=$PWD/lbc-root" >> "$GITHUB_ENV"
 
       - name: Fetch rapidsnark (iden3 iOS)
@@ -111,11 +118,12 @@ jobs:
           # iden3's iOS zip has no lib/ subdir — files sit at the archive root.
           # Their libgmp.a is a FAT archive (arm64 + arm64e slices); rustc's
           # archive reader cannot merge it into a staticlib ("Unsupported
-          # archive identifier"). Thin it to the device slice in place.
-          lipo -thin arm64 "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp.a" \
-            -o "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp-thin.a"
-          mv "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp-thin.a" \
-             "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp.a"
+          # archive identifier"). Thin any fat archive to the device slice.
+          find "rapidsnark-iOS-${RAPIDSNARK_VERSION}" -name '*.a' | while read -r a; do
+            if lipo -info "$a" 2>/dev/null | grep -q 'fat file'; then
+              lipo -thin arm64 "$a" -o "$a.thin" && mv "$a.thin" "$a"
+            fi
+          done
           echo "RAPIDSNARK_LIB_DIR=$PWD/rapidsnark-iOS-${RAPIDSNARK_VERSION}" >> "$GITHUB_ENV"
 
       - name: cargo check wsp-lez-core (no keycard / pcsc)
