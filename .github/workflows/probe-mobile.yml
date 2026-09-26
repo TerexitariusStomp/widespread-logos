@@ -130,7 +130,18 @@ jobs:
         run: cargo check -p wsp-lez-core --target "$TARGET" --no-default-features
 
       - name: cargo build libwsp_lez_ffi.a (+ dylib)
-        run: cargo build -p wsp-lez-ffi --release --target "$TARGET"
+        run: |
+          # The circuits/rapidsnark build scripts emit `-lstdc++`, which
+          # does not exist on iOS (Apple removed libstdc++; the C++
+          # symbols all come from the `-lc++` already on the link line).
+          # An empty archive named libstdc++.a satisfies the flag while
+          # contributing nothing. Staticlib (the .a) never links so this
+          # only affects the bonus .dylib.
+          mkdir -p ios-shim
+          : > shim.c && clang -arch arm64 -target arm64-apple-ios -c shim.c -o ios-shim/shim.o
+          ar crs ios-shim/libstdc++.a ios-shim/shim.o
+          RUSTFLAGS="-L $PWD/ios-shim" \
+            cargo build -p wsp-lez-ffi --release --target "$TARGET"
 
       - name: Verify artifact (arm64 archive, exports present)
         run: |
