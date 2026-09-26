@@ -16,6 +16,9 @@ the Logos solutions catalog. PRs 1–3 are filed:
   (Windows static archive + target mapping; flags the missing LICENSE)
 - **PR 7** → https://github.com/logos-blockchain/logos-execution-zone/pull/924
   (`keycard` cargo feature — unblocks Android/iOS wallet-core builds)
+- **PR 8** → https://github.com/logos-co/nix-bundle-lgx/pull/18
+  (`ucrtbase` in `windowsSystemDlls` — the windows payload gate rejects
+  mingw plugins that import the Universal CRT otherwise)
 
 **Platform status** (fork releases are live regardless of upstream merge):
 `TerexitariusStomp/logos-blockchain-circuits` `v0.5.3` publishes 7 bundles —
@@ -24,6 +27,11 @@ ios aarch64**. `TerexitariusStomp/logos-blockchain-rust-rapidsnark`
 `rapidsnark-pic-v0.0.8` adds the Windows PIC archive. `wsp-lez-core` compiles
 for `aarch64-linux-android`/`aarch64-apple-ios` via `--no-default-features`
 (keycard gate, verified by `.github/workflows/probe-mobile.yml`).
+Windows wallet plugin: `packages.x86_64-windows.lgx-portable` produces a
+`.lgx` whose `widespread_wallet_plugin.dll` (pei-x86-64) embeds the full
+proving stack — the msys2 `ld -r` local-COMDAT pathology in the bundled
+circuits objects is neutralized by a configure-time archive pass in
+`modules/widespread_wallet/CMakeLists.txt`.
 
 Each entry below is self-contained: title, motivation, and the exact
 diff/content.
