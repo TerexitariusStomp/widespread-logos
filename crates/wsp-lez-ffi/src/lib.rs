@@ -151,7 +151,7 @@ pub unsafe extern "C" fn wsp_lez_worker_execute(
 #[unsafe(no_mangle)]
 pub unsafe extern "C" fn wsp_lez_free(ptr: *mut u8, len: usize) {
     if !ptr.is_null() {
-        drop(unsafe { Box::from_raw(slice::from_raw_parts_mut(ptr, len)) });
+        drop(unsafe { Box::from_raw(std::ptr::slice_from_raw_parts_mut(ptr, len)) });
     }
 }
 
