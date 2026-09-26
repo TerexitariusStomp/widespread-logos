@@ -19,14 +19,24 @@ the Logos solutions catalog. PRs 1–3 are filed:
 - **PR 8** → https://github.com/logos-co/nix-bundle-lgx/pull/18
   (`ucrtbase` in `windowsSystemDlls` — the windows payload gate rejects
   mingw plugins that import the Universal CRT otherwise)
+- **PR 9** → https://github.com/logos-co/logos-modules-release-action/pull/28
+  (`darwin-x86_64` variant on `macos-15-intel` — upstream's claim that
+  "macOS Intel has no runner family" predates the GitHub-hosted Intel
+  runner). Until merge, `release-widespread-wallet.yml` and
+  `release-on-merge.yml` pin the forked action by SHA.
 
 **Platform status** (fork releases are live regardless of upstream merge):
 `TerexitariusStomp/logos-blockchain-circuits` `v0.5.3` publishes 7 bundles —
 linux x86_64/aarch64, macOS aarch64/x86_64, windows x86_64, **android aarch64,
 ios aarch64**. `TerexitariusStomp/logos-blockchain-rust-rapidsnark`
-`rapidsnark-pic-v0.0.8` adds the Windows PIC archive. `wsp-lez-core` compiles
-for `aarch64-linux-android`/`aarch64-apple-ios` via `--no-default-features`
-(keycard gate, verified by `.github/workflows/probe-mobile.yml`).
+`rapidsnark-pic-v0.0.8` adds the Windows PIC archive. Mobile is a real
+artifact now: `crates/wsp-lez-ffi` exposes the `Worker::execute` protocol over
+a C ABI (`wsp_lez_worker_new`/`wsp_lez_worker_execute`/`wsp_lez_worker_free`/
+`wsp_lez_free`), and `.github/workflows/probe-mobile.yml` builds and verifies
+`libwsp_lez_ffi.so` (android-aarch64) and `libwsp_lez_ffi.a`
+(ios-aarch64, keycard gate off) — uploadable artifacts, not just `cargo
+check`. `darwin-x86_64` is wired into the release variants; the leg lands on
+the next release build.
 Windows wallet plugin: `packages.x86_64-windows.lgx-portable` produces a
 `.lgx` whose `widespread_wallet_plugin.dll` (pei-x86-64) embeds the full
 proving stack — the msys2 `ld -r` local-COMDAT pathology in the bundled

@@ -11,10 +11,14 @@ jobs:
   release:
     permissions:
       contents: write
-    uses: logos-co/logos-modules-release-action/.github/workflows/release.yml@v1
+    # Same fork pin as the core module — @v1 has no darwin-x86_64 runner
+    # mapping. Revert to @v1 when logos-co/logos-modules-release-action#28
+    # merges.
+    uses: TerexitariusStomp/logos-modules-release-action/.github/workflows/release.yml@e0e34bf44f93970b99b5aed8991123349345da31
     with:
       module_path: modules/widespread_wallet_ui
-      # QML is platform-independent; windows-x86_64 lets lgpm resolve the
-      # module on Windows installs (built on the linux-amd64 runner).
-      variants: "darwin-arm64,linux-amd64,linux-arm64,windows-x86_64"
+      # QML is platform-independent; windows-x86_64 and darwin-x86_64 let
+      # lgpm resolve the module on Windows and Intel-macOS installs (the
+      # darwin-x86_64 leg runs on the macos-15-intel runner).
+      variants: "darwin-arm64,darwin-x86_64,linux-amd64,linux-arm64,windows-x86_64"
 

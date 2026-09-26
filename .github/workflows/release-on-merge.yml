@@ -70,16 +70,23 @@ jobs:
     if: needs.gate.outputs.core_needed == 'true'
     permissions:
       contents: write
-    uses: logos-co/logos-modules-release-action/.github/workflows/release.yml@v1
+    # Same fork pin as release-widespread-wallet.yml — @v1 has no
+    # darwin-x86_64 runner mapping. Revert when
+    # logos-co/logos-modules-release-action#28 merges.
+    uses: TerexitariusStomp/logos-modules-release-action/.github/workflows/release.yml@e0e34bf44f93970b99b5aed8991123349345da31
     with:
       module_path: modules/widespread_wallet
+      variants: "darwin-arm64,darwin-x86_64,linux-amd64,linux-arm64,windows-x86_64"
 
   release-ui:
     needs: [gate, release-core]
     if: needs.gate.outputs.ui_needed == 'true'
     permissions:
       contents: write
-    uses: logos-co/logos-modules-release-action/.github/workflows/release.yml@v1
+    # Fork pin — see release-core. The UI ships darwin-x86_64 too so lgpm
+    # resolves it on Intel macs.
+    uses: TerexitariusStomp/logos-modules-release-action/.github/workflows/release.yml@e0e34bf44f93970b99b5aed8991123349345da31
     with:
       module_path: modules/widespread_wallet_ui
+      variants: "darwin-arm64,darwin-x86_64,linux-amd64,linux-arm64,windows-x86_64"
 

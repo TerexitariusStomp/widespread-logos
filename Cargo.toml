@@ -7,6 +7,7 @@ members = [
     "crates/wsp-lez",
     "modules/widespread_wallet",
     "crates/wsp-lez-wasm",
+    "crates/wsp-lez-ffi",
 ]
 
 [workspace.package]

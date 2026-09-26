@@ -1,0 +1,20 @@
+[package]
+name = "wsp-lez-ffi"
+description = "C ABI facade over wsp-lez-core — the mobile (Android/iOS) transport for the wallet worker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+# cdylib for Android JNI linking (libwsp_lez_ffi.so), staticlib for iOS/Xcode
+# (libwsp_lez_ffi.a — same archive Swift static-links into the app target).
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+# default-features=false keeps the keycard/PC/SC graph out — mobile has no
+# pcsc-lite. The Op/Output wire protocol is identical either way.
+wsp-lez-core = { path = "../wsp-lez-core", default-features = false }
+serde_json.workspace = true
+
+[lints]
+workspace = true

@@ -1,13 +1,22 @@
-name: Probe mobile wallet-core builds
+name: Build mobile wallet-core artifacts
 
-# Validates that wsp-lez-core compiles for Android and iOS targets with the
-# upstream `keycard` feature disabled (no pcsc-sys in the tree). Build scripts
-# run (circuits/rapidsnark artifact resolution is exercised); linking is not —
-# `cargo check` is the gate. The circuits bundles come from the fork release
-# (upstream does not publish mobile assets yet).
+# Produces the embeddable mobile libraries: libwsp_lez_ffi.so for Android
+# (JNI-linked cdylib) and libwsp_lez_ffi.a for iOS (static archive Xcode
+# links into the app target). The C ABI — wsp_lez_worker_new /
+# wsp_lez_worker_execute / wsp_lez_free — wraps wsp-lez-core's Worker with
+# the upstream `keycard` feature disabled (no pcsc-sys on mobile). Circuits
+# bundles come from the fork release (upstream does not publish mobile
+# assets yet).
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - "crates/wsp-lez-ffi/**"
+      - "crates/wsp-lez-core/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/probe-mobile.yml"
 
 env:
   CARGO_TERM_COLOR: always
@@ -43,7 +52,9 @@ jobs:
         run: |
           NDK_BIN="$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin"
           mkdir -p .cargo
-          cat > .cargo/config.toml <<EOF
+          # Append, not overwrite — the repo config carries the LEZ source
+          # replacement that the lockfile depends on.
+          cat >> .cargo/config.toml <<EOF
           [target.aarch64-linux-android]
           linker = "$NDK_BIN/aarch64-linux-android26-clang"
           ar = "$NDK_BIN/llvm-ar"
@@ -51,8 +62,29 @@ jobs:
           echo "CC_aarch64_linux_android=$NDK_BIN/aarch64-linux-android26-clang" >> "$GITHUB_ENV"
           echo "AR_aarch64_linux_android=$NDK_BIN/llvm-ar" >> "$GITHUB_ENV"
 
-      - name: cargo check (no keycard / pcsc)
-        run: cargo check -p wsp-lez-core --target aarch64-linux-android --no-default-features
+      - name: cargo check wsp-lez-core (no keycard / pcsc)
+        run: cargo check -p wsp-lez-core --target "$TARGET" --no-default-features
+
+      - name: cargo build libwsp_lez_ffi.so
+        run: cargo build -p wsp-lez-ffi --release --target "$TARGET"
+
+      - name: Verify artifact (aarch64 ELF, exports present)
+        env:
+          NDK_BIN: ${{ env.ANDROID_NDK_ROOT }}/toolchains/llvm/prebuilt/linux-x86_64/bin
+        run: |
+          SO="target/$TARGET/release/libwsp_lez_ffi.so"
+          test -f "$SO"
+          file "$SO"
+          "$NDK_BIN/llvm-readelf" -h "$SO" | grep -q 'Machine:.*AArch64'
+          for sym in wsp_lez_worker_new wsp_lez_worker_execute wsp_lez_worker_free wsp_lez_free; do
+            "$NDK_BIN/llvm-nm" -D --defined-only "$SO" | grep -q " $sym\$" || { echo "::error::missing export $sym"; exit 1; }
+          done
+          echo "all four FFI exports present"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: wsp-lez-ffi-android-aarch64
+          path: target/aarch64-linux-android/release/libwsp_lez_ffi.so
 
   ios-lib:
     runs-on: macos-latest
@@ -79,5 +111,25 @@ jobs:
           # iden3's iOS zip has no lib/ subdir — files sit at the archive root.
           echo "RAPIDSNARK_LIB_DIR=$PWD/rapidsnark-iOS-${RAPIDSNARK_VERSION}" >> "$GITHUB_ENV"
 
-      - name: cargo check (no keycard / pcsc)
-        run: cargo check -p wsp-lez-core --target aarch64-apple-ios --no-default-features
+      - name: cargo check wsp-lez-core (no keycard / pcsc)
+        run: cargo check -p wsp-lez-core --target "$TARGET" --no-default-features
+
+      - name: cargo build libwsp_lez_ffi.a (+ dylib)
+        run: cargo build -p wsp-lez-ffi --release --target "$TARGET"
+
+      - name: Verify artifact (arm64 archive, exports present)
+        run: |
+          LIB="target/$TARGET/release/libwsp_lez_ffi.a"
+          test -f "$LIB"
+          lipo -info "$LIB" | grep -q arm64
+          for sym in wsp_lez_worker_new wsp_lez_worker_execute wsp_lez_worker_free wsp_lez_free; do
+            nm -g --defined-only "$LIB" 2>/dev/null | grep -q " _$sym\$" || { echo "::error::missing export $sym"; exit 1; }
+          done
+          echo "all four FFI exports present"
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: wsp-lez-ffi-ios-aarch64
+          path: |
+            target/aarch64-apple-ios/release/libwsp_lez_ffi.a
+            target/aarch64-apple-ios/release/libwsp_lez_ffi.dylib

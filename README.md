@@ -11,6 +11,8 @@ crates/
   wsp-lez-core   Stateless worker: execute(op, blob) -> (result, blob') over upstream WalletCore
   wsp-lezd       Chromium native-messaging daemon wrapping the worker
   wsp-lez        CLI over the worker (vault.blob persistence)
+  wsp-lez-wasm   wasm32 facade over upstream codecs (account ids, PDAs, viewing-key decrypt)
+  wsp-lez-ffi    C ABI facade over the worker — Android .so / iOS .a mobile surface
 modules/
   widespread_wallet      Logos Core module (LIDL contract + generated provider + worker host)
   widespread_wallet_ui   QtWebView UI module hosting the shared wallet-ui bundle
@@ -92,9 +94,9 @@ rapidsnark). Surfaces that sign or prove need one; view/recover surfaces
 | Linux x86_64 | ✅ release variant | ✅ | ✅ |
 | Linux arm64 | ✅ release variant | ✅ | ✅ |
 | macOS Apple Silicon | ✅ release variant | ✅ | ✅ |
-| macOS Intel | source build (`x86_64-darwin` flake entry) | ✅ (via fork archive) | ✅ |
+| macOS Intel | ✅ release variant — `darwin-x86_64` leg builds on `macos-15-intel` via the forked release action (upstream PR logos-modules-release-action#28) | ✅ (via fork archive) | ✅ |
 | Windows x86_64 | ✅ release variant (mingw cross) | ✅ | ✅ |
-| Android / iOS | circuits bundles build on the fork CI (aarch64); `wsp-lez-core` compiles for `aarch64-linux-android` / `aarch64-apple-ios` with `--no-default-features` (keycard/PCSC off — upstream PR logos-execution-zone#924). `.github/workflows/probe-mobile.yml` is the gate | — | ✅ |
+| Android / iOS | No `.lgx` — Logos module loading is a desktop/Qt mechanism. Mobile embeds `crates/wsp-lez-ffi`, a C ABI over the same `Worker::execute` protocol: `libwsp_lez_ffi.so` (Android aarch64) and `libwsp_lez_ffi.a` (iOS aarch64) build in `.github/workflows/probe-mobile.yml` with `--no-default-features` (keycard/PCSC off — upstream PR logos-execution-zone#924) | — | ✅ |
 
 Forks supplying the extra archives: `TerexitariusStomp/logos-blockchain-circuits`
 (macos-x86_64, windows, android, ios legs) and

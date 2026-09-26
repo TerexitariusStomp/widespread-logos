@@ -15,12 +15,18 @@ jobs:
   release:
     permissions:
       contents: write
-    uses: logos-co/logos-modules-release-action/.github/workflows/release.yml@v1
+    # TEMPORARY FORK PIN: upstream @v1 rejects darwin-x86_64 outright ("macOS
+    # Intel has no runner family" — stale now that GitHub hosts
+    # macos-15-intel). The fork branch adds the variant and maps it to that
+    # runner; revert to @v1 once logos-co/logos-modules-release-action#28
+    # merges.
+    uses: TerexitariusStomp/logos-modules-release-action/.github/workflows/release.yml@e0e34bf44f93970b99b5aed8991123349345da31
     with:
       module_path: modules/widespread_wallet
       # Variants come from the module's flake.nix (#lgx-portable) — the flake
       # is the single source of truth for what is buildable. windows-x86_64 is
       # opt-in upstream: it is a mingw cross build realised on the linux-amd64
       # runner through the flake's packages.x86_64-windows pseudo-system.
-      variants: "darwin-arm64,linux-amd64,linux-arm64,windows-x86_64"
+      # darwin-x86_64 is a native build on the macos-15-intel runner.
+      variants: "darwin-arm64,darwin-x86_64,linux-amd64,linux-arm64,windows-x86_64"
 
