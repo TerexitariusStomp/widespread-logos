@@ -69,9 +69,9 @@ jobs:
         run: cargo build -p wsp-lez-ffi --release --target "$TARGET"
 
       - name: Verify artifact (aarch64 ELF, exports present)
-        env:
-          NDK_BIN: ${{ env.ANDROID_NDK_ROOT }}/toolchains/llvm/prebuilt/linux-x86_64/bin
         run: |
+          # ANDROID_NDK_ROOT is runner-provided — not resolvable in `env:`.
+          NDK_BIN="$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin"
           SO="target/$TARGET/release/libwsp_lez_ffi.so"
           test -f "$SO"
           file "$SO"
@@ -109,6 +109,13 @@ jobs:
             "https://github.com/iden3/rapidsnark/releases/download/${RAPIDSNARK_VERSION}/rapidsnark-iOS-${RAPIDSNARK_VERSION}.zip"
           unzip -o -q rs.zip
           # iden3's iOS zip has no lib/ subdir — files sit at the archive root.
+          # Their libgmp.a is a FAT archive (arm64 + arm64e slices); rustc's
+          # archive reader cannot merge it into a staticlib ("Unsupported
+          # archive identifier"). Thin it to the device slice in place.
+          lipo -thin arm64 "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp.a" \
+            -o "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp-thin.a"
+          mv "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp-thin.a" \
+             "rapidsnark-iOS-${RAPIDSNARK_VERSION}/libgmp.a"
           echo "RAPIDSNARK_LIB_DIR=$PWD/rapidsnark-iOS-${RAPIDSNARK_VERSION}" >> "$GITHUB_ENV"
 
       - name: cargo check wsp-lez-core (no keycard / pcsc)
