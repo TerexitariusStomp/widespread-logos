@@ -10,7 +10,14 @@
     # predates a key drops that key with no build failure and no test failure
     # (logos-co/eth-lez-atomic-swaps#60). Keep it current; the durable check is
     # CI's manifest round trip, not the pin.
-    nix-bundle-lgx.url = "github:logos-co/nix-bundle-lgx";
+    # Fork rev: adds "ucrtbase" to windowsSystemDlls on top of upstream main
+    # (which has "winscard" but not ucrtbase). Upstream: logos-co PR #18 —
+    # drop the fork once it lands.
+    nix-bundle-lgx.url =
+      "github:TerexitariusStomp/nix-bundle-lgx/9ba9fb320c3b0514fb85bbe3ae9839ea0b593907";
+    # The builder constructs the windows payload gate with ITS OWN lgx pin;
+    # redirect it so the gate sees the winscard+ucrtbase entries.
+    logos-module-builder.inputs.nix-bundle-lgx.follows = "nix-bundle-lgx";
 
     nixpkgs.follows = "logos-module-builder/nixpkgs";
     rust-overlay = {
