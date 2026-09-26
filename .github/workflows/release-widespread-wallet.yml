@@ -1,7 +1,12 @@
 name: Release widespread_wallet
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      skip_if_published:
+        description: "Skip when <module>-v<version> already has .lgx + sidecar (default: yes). Set false to rebuild/republish the current version — e.g. to land a newly-added variant on an existing tag."
+        type: boolean
+        default: true
 
 # Shared with release-widespread-wallet-ui.yml and release-on-merge.yml so a
 # manual dispatch cannot run concurrently with a merge-triggered release and
@@ -29,4 +34,5 @@ jobs:
       # runner through the flake's packages.x86_64-windows pseudo-system.
       # darwin-x86_64 is a native build on the macos-15-intel runner.
       variants: "darwin-arm64,darwin-x86_64,linux-amd64,linux-arm64,windows-x86_64"
+      skip_if_published: ${{ inputs.skip_if_published }}
 
